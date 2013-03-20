@@ -9,16 +9,25 @@
 	Form Settings
 </h4>
 
+<?php 
+	var_dump(get_option('gravity_form_to_crm_settings'));
+
+?>
+
+<input type="hidden" name="gravity_form_id" value="<?php echo $_GET['id']; ?>" />
+
 <table cellspacing="5" cellpadding="5">
 
 	<tr>
 		<td align="right"> Assign to This User ID </td>
-		<td> <?php echo self::get_text_field($form_id, 'gravity_form_user_id'); ?> </td>
+		<td> <input type="text" name="gravity_form_user_id" value="<?php ?>" /> </td>
 	</tr>	
 	<tr>
 		<td align="right"> Assign Contact to Campaign </td>
 		<td> 
-			<?php self::get_settings_selector($form_id, 'gravity_form_campaign'); ?>
+			<select name="gravity_form_campaign">
+				
+			</select>
 		</td>
 	</tr>
 	<tr>

@@ -28,10 +28,10 @@ class GravityFormCustomCRM{
 		'AgentName' => array('AgentName', 'AgentName'),
 		'HasAgent' => array('HasAgent', 'HasAgent'),
 		'ReferrerURL' => array('ReferrerURL', 'ReferrerURL'),
-		'FirstName' => array('FirstName', 'FirstName'),
-		'LastName' => array('LastName', 'LastName'),
-		'EmailPrimary' => array('EmailPrimary', 'EmailPrimary'),
-		'EmailSecondary' => array('EmailSecondary', 'EmailSecondary'),
+		'FirstName' => array('First Name', 'FirstName'),
+		'LastName' => array('Last Name', 'LastName'),
+		'EmailPrimary' => array('Email Primary', 'EmailPrimary'),
+		'EmailSecondary' => array('Email Secondary', 'EmailSecondary'),
 		'EmailPrimaryConfirmed' => array('EmailPrimaryConfirmed', 'EmailPrimaryConfirmed'),
 		'UserId' => array('UserId', 'UserId'),
 		'ReferringUserId' => array('ReferringUserId', 'ReferringUserId'),
@@ -50,34 +50,19 @@ class GravityFormCustomCRM{
 		'RequireEmailConfirmed' => array('RequireEmailConfirmed', 'RequireEmailConfirmed')
 	);
 	
-	//xml keys
 	
-	public static $xml_keys_dfaults = array(
-		'client_fname' => 'ClientFirstName',
-		'client_lname' => 'ClientLastName',
-		'client_addr1' => 'ClientAddress1',
-		'client_addr2' =>  'ClientAddress2',
-		'client_zip' => 'ClientZip',
-		'client_city' => 'ClientCity',
-		'client_town' => 'ClientTown',
-		'client_telephone' =>'ClientTelephone',
-		'client_email' => 'ClientEmail',
-		'client_state' => 'ClientState',
-		'flight_location' => 'FlightLocation',
-		'flight_date' => 'FlightDate',
-		'flight_length' => 'FlightLenghth',
-		'flight_video_enable' => 'FlightVideo',
-		'person_who_fly_fname' => 'FlyingPersonFirstName',
-		'person_who_fly_lname' =>'FlyingPersonLastName',
-		'person_who_fly_height' => 'FlyingPersonHeight',
-		'person_who_fly_weight' => 'FlyingPersonWeight',
-		'money_sent' => 'MoneySent',
-		'reseller_id' => 'ResellerId',
-		'client_message' => 'Message',
-		
-		
+	public static $gftooltips_settings = array(
+		'UserId' => array('Assign to thi user ID', 'User Id'),
+		'Campaign' => array('Assign Contact to Campaign', 'Assign Contact to Campaign'),
+		'Group' => array('Assign Contatct to Group', 'Assign Contact to Group'),
+		'Source' => array('Assign Lead Source As', 'Assign Lead Source As'),
+		'Rate' => array('Assign Rating to Contact', 'Assign Rating to Contact'),
+		'EmailConfirm' => array('Require Email Confirmation', 'Require Email Confirmation'),
+		'EmailContarct' => array('Email Contact on Register', 'Email Contact on Register'),
+		'notifytext' => array('Notify me via Text', 'Notify me via Text'),
+		'notifyemail' => array('Notify me via Email', 'Notify me via Email')
 	);
-	
+		
 	
 	
 	/*
@@ -95,6 +80,20 @@ class GravityFormCustomCRM{
 		add_action('admin_menu', array(get_class(), 'admin_menu_crm'));
 		
 		add_shortcode('crm_reseller_id', array(get_class(), 'set_reseller_id'));
+		
+		//form settings to be saved
+		//add_action('gform_after_save_form', array(get_class(), 'gform_after_save_form'));
+		//add_action('init', array(get_class(), 'gform_after_save_form'));
+		
+		add_action('init', array(get_class(), 'soap_checking'));
+		
+	}
+	
+	
+	static function soap_checking(){
+		$crm = new Gravity_form_CRM();
+		$campaigns = $crm->get_campaigns(0);
+		var_dump($campaigns); die();
 	}
 	
 	/*
@@ -179,6 +178,7 @@ class GravityFormCustomCRM{
 		if(isset($form_id) != $_GET['id']) return;
 		
 		
+		
 		 echo '<li><input type="checkbox" onclick="ToggleCustomCRM();" id="gform_customcrm" /> ';
 		 echo '<label for="gform_customcrm" id="gform_enable_customcrm_label">';
 		 _e("Enable CustomCRM integration ");
@@ -244,6 +244,59 @@ class GravityFormCustomCRM{
 		return $str;
 	}
 	
+	
+	
+	//get form text field
+	static function get_text_field($form_id, $field_name, $value = null) {
+		$str = '<input style="width:100%" type="text" id="'.$field_name.'" value="" onblur=\'ChangeCustomCRMfield("'.$field_name.'");\'>';
+		$str .= '<script> jQuery("#'.$field_name.'").val( form.'.$field_name.'); </script>'."\n";
+		return $str;
+	}
+	
+	
+	//get setting selector
+	static function get_settings_selector($form_id, $field_name, $value = null){
+		switch ($field_name){
+			case "gravity_form_campaign" :
+				return self::campaign_selector($form_id, $field_name);
+				break;
+				
+			case "gravity_form_campaign" :
+				break;
+				
+			case "gravity_form_campaign" :
+				break;
+				
+			case "gravity_form_campaign" :
+				break;
+				
+			case "gravity_form_campaign" :
+				break;
+			
+			case "gravity_form_campaign" :
+				break;
+			
+			case "gravity_form_campaign" :
+				break;
+			
+			case "gravity_form_campaign" :
+				break;
+				
+			case "gravity_form_campaign" :
+				break;
+		}
+	}
+	
+	
+	static function campaign_selector($form_id, $field_name, $value = null){
+		$crm = new Gravity_form_CRM();
+		$campaigns = $crm->get_campaigns(0);
+		
+		//var_dump($campaigns); 
+	}
+		
+		
+	
 	/*
 	 * statif cuntions to return fields
 	 */
@@ -273,5 +326,44 @@ class GravityFormCustomCRM{
 	static function set_reseller_id(){
 		return 'goodboy';
 	}
-
+	
+	
+	
+	//saving the form
+	static function gform_after_save_form(){
+		
+		var_dump($_REQUEST); die();
+		
+		$form_id = $_POST['gravity_form_id'];
+		//var_dump($form_id); die();		
+		
+		if($form_id) {
+			$data = array(
+				'user_id' => trim($_POST['gravity_form_user_id']),
+				'campaign' => $_POST['gravity_form_campaign'],
+				'group' => $_POST['gravity_form_group'],
+				'lead_source' => $_POST['gravity_form_lead_source'],
+				'rating' => $_POST['gravity_form_rating'],
+				'email_confirm' => $_POST['gravity_form_email_confirm'],
+				'email_contact' => $_POST['gravity_form_email_contact'],
+				'notify_text' => $_POST['gravity_form_notify_text'],
+				'notify_email' => $_POST['gravity_form_notify_email']
+			);
+			
+			$forms_data = get_option('gravity_form_to_crm_settings');
+			if($forms_data){
+				$forms_data[$form_id] = $data;
+			}
+			else{
+				$forms_data = array();
+				$forms_data[$form_id] = $data;
+			}
+			
+			var_dump($forms_data); die();
+			
+			return update_option('gravity_form_to_crm_settings', $forms_data);
+		}
+	}
+	
+	//get form settings
 }

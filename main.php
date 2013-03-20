@@ -17,6 +17,8 @@ define('CRMGRAVITYFILE', __FILE__);
 define('CROMGRAVITYURL', plugins_url('', __FILE__));
 
 
+include CRMGRAVITYDIR . '/classes/CRM.php';
+
 include CRMGRAVITYDIR . '/classes/gf-crm-class-admin.php';
 GravityFormCustomCRM :: init();
 
