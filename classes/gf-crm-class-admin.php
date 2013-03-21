@@ -85,15 +85,15 @@ class GravityFormCustomCRM{
 		//add_action('gform_after_save_form', array(get_class(), 'gform_after_save_form'));
 		//add_action('init', array(get_class(), 'gform_after_save_form'));
 		
-		add_action('init', array(get_class(), 'soap_checking'));
+	//	add_action('init', array(get_class(), 'soap_checking'));
 		
 	}
 	
 	
 	static function soap_checking(){
 		$crm = new Gravity_form_CRM();
-		$campaigns = $crm->get_campaigns(0);
-		var_dump($campaigns); die();
+		self::campaign_selector(null, null, null);
+		die();
 	}
 	
 	/*
@@ -258,7 +258,7 @@ class GravityFormCustomCRM{
 	static function get_settings_selector($form_id, $field_name, $value = null){
 		switch ($field_name){
 			case "gravity_form_campaign" :
-				return self::campaign_selector($form_id, $field_name);
+				return self::get_settings_field_selector(self::campaign_selector(), $form_id, $field_name, $value = null);
 				break;
 				
 			case "gravity_form_campaign" :
@@ -288,14 +288,52 @@ class GravityFormCustomCRM{
 	}
 	
 	
-	static function campaign_selector($form_id, $field_name, $value = null){
+	//campaigns are fetched and handled
+	static function campaign_selector(){
 		$crm = new Gravity_form_CRM();
-		$campaigns = $crm->get_campaigns(0);
+		$campaigns_xml = $crm->get_campaigns(0);
+		$c = array();
 		
-		//var_dump($campaigns); 
+		if($campaigns_xml){
+			$xml = simplexml_load_string($campaigns_xml);
+			$namespace = $xml->getNamespaces(true);
+			$xml->registerXPathNamespace('c', $namespace['soap']);
+			$body = $xml->xpath('//c:Body');
+			
+			$campaigns = $body[0]->GetUserCampaignsResponse->GetUserCampaignsResult->RtkCampaignProfile;
+
+			if($campaigns){				
+				foreach($campaigns as $campaign){
+					$c[] = array(
+						'id' => (int) $campaign->CampaignID,
+						'name' => (string) $campaign->CampaignName
+					);
+					
+				}
+			}
+		}
+
+		return $c;
 	}
+	
+	//settings fields selector
+	static function get_settings_field_selector($fields, $form_id, $field_name, $selected_field = null){					
 		
+		$str = '<select id="'.$field_name.'" size="1" onchange=\'ChangeCustomCRMfield("'.$field_name.'");\'>';
+		$str .= '<option value="">Choose</option>'."\n";
+		if($fields){
+			foreach($fields as $_field){
+				$str .= '<option value="'.$_field['id'].'"';
+				if($selected_field && $_field['id'] == $selected_field) $str .= ' selected';
+				$str .= '>'.$_field['name'].'</option>'."\n";
+			}			
+		}
 		
+		$str .= '</select>'."\n";
+		$str .= '<script> jQuery("#'.$field_name.'").val( form.'.$field_name.'); </script>'."\n";
+		return $str;		
+	}
+	
 	
 	/*
 	 * statif cuntions to return fields

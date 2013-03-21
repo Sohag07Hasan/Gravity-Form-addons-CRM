@@ -6,15 +6,12 @@ class Gravity_form_CRM{
 	const username = "oneparkplace";
 	const pass = "123lanman";
 	const TypeID = "Vendor";
+	const user_id = 40572;
 	
 	const user_proxy_url = 'https://secure.1parkplace.com/api/1.0/userproxy.asmx';
 	const contact_proxy_url = 'https://secure.1parkplace.com/api/1.0/contactproxy.asmx';
+		
 	
-	const soap_envelop_first = '<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">';
-	const soap_envelop_last = '</soap:Envelope>';
-	const soap_body_first = '<soap:Body>';
-	const soap_body_last = '</soap:Body>';
-	const user_id = 40572;
 	
 	
 	//post handler by curl
@@ -38,23 +35,7 @@ class Gravity_form_CRM{
 	
 	//returns the campaigns
 	public function get_campaigns($user_id){
-		
-		//generating the xml
-		$xml = '<?xml version="1.0" encoding="utf-8"?>';
-		$xml .= self::soap_envelop_first;
-		$xml .= self::soap_body_first;
-		
-		//xml main content
-		$xml .= '<GetUserCampaigns xmlns="http://tempuri.org/">';
-		$xml .= '<userID>';
-		$xml .= self::user_id;
-		$xml .= '</userID>';
-		$xml .= '</GetUserCampaigns>';
-		
-		$xml .= self::soap_body_last;
-		$xml .= self::soap_envelop_last;		
-		
-		
+				
 		$xml = '<?xml version="1.0" encoding="utf-8"?>
 <soap12:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://www.w3.org/2003/05/soap-envelope">
   <soap12:Body>
@@ -66,22 +47,40 @@ class Gravity_form_CRM{
 		
 		$url = self::user_proxy_url;
 		$action = '"https://secure.1parkplace.com/api/1.0/GetUserCampaigns"';
-		$ch = $this->curlPostHandler($url, $xml, $action);
-			
-		$response = curl_exec($ch);
-		$http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-		$curl_header = curl_getinfo($ch);
 		
-		curl_close($ch);
-		
-		return array(
-			'http_code' => $http_code,
-			'response' => $response,
-			'xml' => $xml,
-			'header' => $curl_header
-		);
-		
-		
+		return $this->authRequest('POST', $url, $xml, $action);
+					
 	}
+	
+	
+ 	//fatch all the request
+	 private function authRequest($method, $url, $data, $action){
+	 	
+	 	//method checking
+	 	switch($method){
+	 		case "GET" :
+	 			$ch = $this->curlGetHandle($url, $data);
+	 			break;
+	 		case "POST" :
+	 			$ch = $this->curlPostHandler($url, $data, $action);
+	 			break;
+	 		case "PUT" :
+	 			break;
+	 	}
+	 	
+	 	//curl execution
+	 	$response = curl_exec($ch);
+		$http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+		curl_close($ch);	
+		
+		if($http_code == 200){
+			return $response;
+		}
+		else{
+			return false;
+		}
+	 	
+	 }
+	
 	
 }

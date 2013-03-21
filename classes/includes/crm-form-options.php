@@ -18,15 +18,14 @@
 	<tr>
 		<td align="right"> Assign Contact to Campaign </td>
 		<td> 
-			<?php self::get_settings_selector($form_id, 'gravity_form_campaign'); ?>
+			<?php echo self::get_settings_selector($form_id, 'gravity_form_campaign'); ?>
 		</td>
 	</tr>
 	<tr>
 		<td align="right"> Assign Contact to Group </td>
+		 
 		<td> 
-			<select name="gravity_form_group">
-				
-			</select>
+			<?php echo self::get_settings_selector($form_id, 'gravity_form_campaign'); ?>
 		</td>
 	</tr>
 	<tr>
