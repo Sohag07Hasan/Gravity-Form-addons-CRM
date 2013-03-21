@@ -92,7 +92,10 @@ class GravityFormCustomCRM{
 	
 	static function soap_checking(){
 		$crm = new Gravity_form_CRM();
-		self::campaign_selector(null, null, null);
+		self::contactGroup_selector(null, null, null);
+		
+		var_dump(self::campaign_selector(null, null, null));
+		
 		die();
 	}
 	
@@ -258,33 +261,45 @@ class GravityFormCustomCRM{
 	static function get_settings_selector($form_id, $field_name, $value = null){
 		switch ($field_name){
 			case "gravity_form_campaign" :
-				return self::get_settings_field_selector(self::campaign_selector(), $form_id, $field_name, $value = null);
+				return self::get_settings_field_selector(self::campaign_selector(), $form_id, $field_name, null);
 				break;
 				
-			case "gravity_form_campaign" :
+			case "gravity_form_contactgroup" :
+				return self::get_settings_field_selector(self::contactGroup_selector(), $form_id, $field_name, null);
 				break;
 				
-			case "gravity_form_campaign" :
+			case "gravity_form_leadSource" :
+				return self::get_settings_field_selector(self::leadSource_selector(), $form_id, $field_name, null);
 				break;
 				
-			case "gravity_form_campaign" :
+			case "gravity_form_contactRating" :
+				return self::get_settings_field_selector(self::contactRating_selector(), $form_id, $field_name, null);
 				break;
 				
-			case "gravity_form_campaign" :
-				break;
-			
-			case "gravity_form_campaign" :
-				break;
-			
-			case "gravity_form_campaign" :
-				break;
-			
-			case "gravity_form_campaign" :
-				break;
-				
-			case "gravity_form_campaign" :
+			case "gravity_form_emailConformation" :
+			case "gravity_form_emailContactOnRegister" :
+			case "gravity_form_notifyViaText" :
+			case "gravity_form_notifyViaEmail" :
+				return self::get_settings_field_selector(self::boolean_selector(), $form_id, $field_name, null);
 				break;
 		}
+	}
+	
+	
+	//eamil selector and it is boolean
+	static function boolean_selector(){
+		$c = array();
+		$d = array(1, 0);
+		$e = array('Yes', 'No');
+		
+		foreach($e as $de => $value){
+			$c[] = array(
+				'id' => $d[$de],
+				'name' => $value
+			); 
+		}
+		
+		return $c;
 	}
 	
 	
@@ -315,6 +330,81 @@ class GravityFormCustomCRM{
 
 		return $c;
 	}
+	
+	
+	//contact group selector
+	static function contactGroup_selector(){
+		$crm = new Gravity_form_CRM();
+		$contact_group_xml = $crm->get_contactGroups(0);
+		$c = array();
+			
+		if($contact_group_xml){
+			$xml = simplexml_load_string($contact_group_xml);
+			$namespace = $xml->getNamespaces(true);
+			$xml->registerXPathNamespace('c', $namespace['soap']);
+			$body = $xml->xpath('//c:Body');
+			
+			//var_dump($body);
+			
+			$cgroups = $body[0]->GetUserContactGroupsResponse->GetUserContactGroupsResult->Group;
+			
+			if($cgroups){
+				foreach($cgroups as $cgroup){
+					$c[] = array(
+						'id' => (int) $cgroup->GroupID,
+						'name' => (string) $cgroup->Caption
+					);
+				}
+			}
+		}
+		
+		return $c;		
+	}
+		
+	
+	//lead selector
+	static function leadSource_selector(){
+		$crm = new Gravity_form_CRM();
+		$leadSource_xml = $crm->get_leadSources(0);
+		$c = array();
+		
+		if($leadSource_xml){
+			$xml = simplexml_load_string($leadSource_xml);
+			$namespace = $xml->getNamespaces(true);
+			$xml->registerXPathNamespace('c', $namespace['soap']);
+			$body = $xml->xpath('//c:Body');
+			
+			$leadSoruces = $body[0]->GetUserCustomLeadSourcesResponse->GetUserCustomLeadSourcesResult->RtkCustomLeadSourceProfile;
+			
+			if($leadSoruces){
+				foreach($leadSoruces as $leadSoruce){
+					$c[] = array(
+						'id' => (string) $leadSoruce->LeadSourceName,
+						'name' => (string) $leadSoruce->LeadSourceName
+					);
+				}
+			}
+		}
+		
+		return $c;
+	}
+	
+	
+	
+	//contact rating selector
+	static function contactRating_selector(){
+		$digit = array(0, 1, 2, 3, 4, 5);
+		$c = array();
+		foreach($digit as $d){
+			$c[] = array(
+				'id' => $d,
+				'name' => $d
+			);
+		}
+		
+		return $c;
+	}
+	
 	
 	//settings fields selector
 	static function get_settings_field_selector($fields, $form_id, $field_name, $selected_field = null){					

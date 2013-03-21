@@ -22,60 +22,47 @@
 		</td>
 	</tr>
 	<tr>
-		<td align="right"> Assign Contact to Group </td>
-		 
+		<td align="right"> Assign Contact to Group </td>		 
 		<td> 
-			<?php echo self::get_settings_selector($form_id, 'gravity_form_campaign'); ?>
+			<?php echo self::get_settings_selector($form_id, 'gravity_form_contactgroup'); ?>
 		</td>
 	</tr>
 	<tr>
 		<td align="right"> Assign Lead Source As </td>
 		<td> 
-			<select name="gravity_form_lead_source">
-				
-			</select>
+			<?php echo self::get_settings_selector($form_id, 'gravity_form_leadSource'); ?>
 		</td>
 	</tr>
 	<tr>
 		<td align="right"> Assign Rating to Contact </td>
 		<td> 
-			<select name="gravity_form_rating">
-				
-			</select>
+			<?php echo self::get_settings_selector($form_id, 'gravity_form_contactRating'); ?>
 		</td>
 	</tr>	
 	<tr>
 		<td align="right"> Require Email Confirmation </td>
 		
 		<td> 
-			<select name="gravity_form_email_confirm">
-				
-			</select>
+			<?php echo self::get_settings_selector($form_id, 'gravity_form_emailConformation'); ?>
 		</td>
 	</tr>
 	<tr>
 		<td align="right"> Email Contact on Register </td>
 		<td> 
-			<select name="gravity_form_email_contact">
-				
-			</select>
+			<?php echo self::get_settings_selector($form_id, 'gravity_form_emailContactOnRegister'); ?>
 		</td>
 	</tr>
 	
 	<tr>
 		<td align="right"> Notify me via Text </td>
 		<td> 
-			<select name="gravity_form_notify_text">
-				
-			</select>
+			<?php echo self::get_settings_selector($form_id, 'gravity_form_notifyViaText'); ?>
 		</td>
 	</tr>
 	<tr>
 		<td align="right"> Notify me via Email </td>
 		<td> 
-			<select name="gravity_form_notify_email">
-				
-			</select>
+			<?php echo self::get_settings_selector($form_id, 'gravity_form_notifyViaEmail'); ?>
 		</td>
 	</tr>
 	
