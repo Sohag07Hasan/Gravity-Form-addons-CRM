@@ -10,16 +10,15 @@
 
 class Form_submission_To_CRM{
 	
+	static $count = 0;
+	
 	/*
 	 * contains the hoook
 	 */
 	public static function init(){
 		//if the form is submitted
-		//add_action("gform_post_submission", array(get_class(), 'push'), 10, 2);
 		add_action("gform_after_submission", array(get_class(), 'push'), 10, 2);
-		add_action('xml_pushed_to_crm', array(get_class(), 'tracing_crm_data'), 10, 2);
-		
-		add_filter('gform_validation', array(get_class(), 'validate'), 100);
+		//add_filter('gform_validation', array(get_class(), 'validate'), 100);		
 	}
 	
 	/**
@@ -41,25 +40,25 @@ class Form_submission_To_CRM{
 	 */
 	static function push($entry, $form){
 		
-		
-		$lead_id = $entry['id'];
-				
-		if(!$form['customcrm_enabled']) return;		
-		include dirname(__FILE__) . '/includes/output-table.php'; die();
-		//include dirname(__FILE__) . '/includes/lead.xml.php';
+		if(!$form['customcrm_enabled']) return;	
+			
+		ob_start();
+		include CRMGRAVITYDIR . '/classes/includes/xml-generator/AddRequest.php';
+		$xml = ob_get_contents();
+		ob_end_clean();
+		die();
 		
 		/*
-		$name = 'download.xml';
+		$name = 'AddRequest.xml';
 		header('Content-type: text/xml');
 		header("Content-disposition: attachment;filename=$name");
 		echo $xml;
-		exit;		
 		*/
 		
-		$status = self::xml_put($xml);
+		die();
 		
-		//action hooks fires with status from the crm
-		do_action('xml_pushed_to_crm', $lead_id, $status);
+		//$status = self::xml_put($xml);
+			
 	}
 	
 	
