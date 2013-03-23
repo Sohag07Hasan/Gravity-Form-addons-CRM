@@ -11,25 +11,22 @@
 		<input type="hidden" name="Crm_saved" value="Y" />
 		<table class="form-table">
 			<tr>
-				<td>CRM URL</td>
-				<td cospan="2"><input size="60" type="text" name="crm_url" value="<?php echo $url_info['crm_url']; ?>" /></td>
-			</tr>
-			<tr>
-				<td>Enable SSL</td>
-				<td cospan="2"><input size="60" type="checkbox" name="crm_ssl" value="1"  <?php checked('1', $ssl);?> /></td>
-			</tr>
-			<tr>
-				<td>Certificate Directory(absolute) </td>
-				<td cospan="2"><input size="60" type="text" name="crm_ssl_dir" value="<?php echo $ssl_dir; ?>" /></td>
-			</tr>
-			<tr>
 				<td>Username</td>
-				<td cospan="2"><input size="60" type="text" name="crm_user" value="<?php echo $url_info['crm_user']; ?>" /></td>
+				<td cospan="2"><input size="60" type="text" name="crm_UserName" value="<?php echo $credentials['crm_UserName']; ?>" /></td>
 			</tr>
 			<tr>
 				<td>Password</td>
-				<td cospan="2"><input size="60" type="text" name="crm_pass" value="<?php echo $url_info['crm_pass']; ?>" /></td>
+				<td cospan="2"><input size="60" type="text" name="crm_Pass" value="<?php echo $credentials['crm_Pass']; ?>" /></td>
 			</tr>
+			<tr>
+				<td>Type ID</td>
+				<td cospan="2"><input size="60" type="text" name="crm_TypeId" value="<?php echo $credentials['crm_TypeId']; ?>" /></td>
+			</tr>
+			<tr>
+				<td>User ID</td>
+				<td cospan="2"><input size="60" type="text" name="crm_UserId" value="<?php echo $credentials['crm_UserId']; ?>" /></td>
+			</tr>
+					
 			<tr>
 				<td><input type="submit" value="save" class="button-primary"  /></td>
 			</tr>

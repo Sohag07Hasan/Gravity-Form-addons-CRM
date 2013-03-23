@@ -43,26 +43,33 @@
 		<td align="right"> Require Email Confirmation </td>
 		
 		<td> 
-			<?php echo self::get_settings_selector($form_id, 'gravity_form_emailConformation'); ?>
+			<?php echo self::get_settings_selector($form_id, 'RequireEmailConfirmed'); ?>
 		</td>
 	</tr>
 	<tr>
 		<td align="right"> Email Contact on Register </td>
 		<td> 
-			<?php echo self::get_settings_selector($form_id, 'gravity_form_emailContactOnRegister'); ?>
+			<?php echo self::get_settings_selector($form_id, 'EmailContactOnRegister'); ?>
+		</td>
+	</tr>
+	
+	<tr>
+		<td align="right"> SMS User On Requested Info </td>
+		<td> 
+			<?php echo self::get_settings_selector($form_id, 'SMSUserOnRequestedInfo'); ?>
 		</td>
 	</tr>
 	
 	<tr>
 		<td align="right"> Notify me via Text </td>
 		<td> 
-			<?php echo self::get_settings_selector($form_id, 'gravity_form_notifyViaText'); ?>
+			<?php echo self::get_settings_selector($form_id, 'SMSUserOnRegister'); ?>
 		</td>
 	</tr>
 	<tr>
 		<td align="right"> Notify me via Email </td>
 		<td> 
-			<?php echo self::get_settings_selector($form_id, 'gravity_form_notifyViaEmail'); ?>
+			<?php echo self::get_settings_selector($form_id, 'EmailUserOnRegister'); ?>
 		</td>
 	</tr>
 	
@@ -86,19 +93,5 @@
 			</tr>
 	
 	<?php endforeach; ?>
-	
-	<?php 
-		foreach (self::$gftooltips_policy as $key => $value) :
-			$key = 'customcrm_' . $key;
-			?>
-			
-			<tr>
-				<td align="right"><?php echo $value[0] ?></td>
-				<td><?php echo self::get_field_selector($form_id, $key); ?> <?php gform_tooltip($key) ?></td>
-			</tr>
-			
-			<?php 
-		endforeach;
-	?>
-	
+		
 </table>

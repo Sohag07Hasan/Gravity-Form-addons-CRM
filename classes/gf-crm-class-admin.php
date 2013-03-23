@@ -18,8 +18,7 @@ class GravityFormCustomCRM{
 		'Address2' => array('Address 2', 'Address 2'),
 		'City' => array('City', 'City'),
 		'State' => array('State', 'State'),
-		'ZIPCode' => array('ZIPCode', 'ZIPCode'),
-		'ContactComments' => array('ContactComments', 'ContactComments'),
+		'ZIPCode' => array('ZIPCode', 'ZIPCode'),		
 		'PhoneCell' => array('PhoneCell', 'PhoneCell'),
 		'PhoneHome' => array('PhoneHome', 'PhoneHome'),
 		'PhoneWork' => array('PhoneWork', 'PhoneWork'),
@@ -27,42 +26,36 @@ class GravityFormCustomCRM{
 		'AgentCompany' => array('AgentCompany', 'AgentCompany'),
 		'AgentName' => array('AgentName', 'AgentName'),
 		'HasAgent' => array('HasAgent', 'HasAgent'),
-		'ReferrerURL' => array('ReferrerURL', 'ReferrerURL'),
 		'FirstName' => array('First Name', 'FirstName'),
 		'LastName' => array('Last Name', 'LastName'),
 		'EmailPrimary' => array('Email Primary', 'EmailPrimary'),
 		'EmailSecondary' => array('Email Secondary', 'EmailSecondary'),
-		'EmailPrimaryConfirmed' => array('EmailPrimaryConfirmed', 'EmailPrimaryConfirmed'),
-		'UserId' => array('UserId', 'UserId'),
-		'ReferringUserId' => array('ReferringUserId', 'ReferringUserId'),
-		'StatusId' => array('Status Id', 'Status Id'),
-		'Rating' => array('Rating', 'Rating'),
-		'MeetingDate' => array('Meeting Date', 'Meeting Date')		
-		
+		'MeetingDate' => array('Meeting Date', 'Meeting Date'),		
+		'ContactComments_1' => array('ContactComments 01', 'ContactComments 01'),
+		'ContactComments_2' => array('ContactComments 02', 'ContactComments 02'),
+		'ContactComments_3' => array('ContactComments 03', 'ContactComments 03'),
+		'ContactComments_4' => array('ContactComments 04', 'ContactComments 04'),
+		'ContactComments_5' => array('ContactComments 05', 'ContactComments 05'),	
 		
 	);
+	
+	
+	// these are to be handled differently
+	public static $gftooltips_additional_profile = array(
+		'gravity_form_user_id' => 'UserId',
+		'RequireEmailConfirmed' => 'EmailPrimaryConfirmed',
+		'gravity_form_contactRating' => 'Rating',
+		
+	);
+	
 	
 	public static $gftooltips_policy = array(
 		'SMSUserOnRegister' => array('SMSUserOnRegister', 'SMSUserOnRegister'),
 		'SMSUserOnRequestedInfo' => array('SMSUserOnRequestedInfo', 'SMSUserOnRequestedInfo'),
 		'EmailUserOnRegister' => array('EmailUserOnRegister', 'EmailUserOnRegister'),
 		'EmailContactOnRegister' => array('EmailContactOnRegister', 'EmailContactOnRegister'),
-		'RequireEmailConfirmed' => array('RequireEmailConfirmed', 'RequireEmailConfirmed')
+		'RequireEmailConfirmed' => array('RequireEmailConfirmed', 'RequireEmailConfirmed')		
 	);
-	
-	
-	public static $gftooltips_settings = array(
-		'UserId' => array('Assign to thi user ID', 'User Id'),
-		'Campaign' => array('Assign Contact to Campaign', 'Assign Contact to Campaign'),
-		'Group' => array('Assign Contatct to Group', 'Assign Contact to Group'),
-		'Source' => array('Assign Lead Source As', 'Assign Lead Source As'),
-		'Rate' => array('Assign Rating to Contact', 'Assign Rating to Contact'),
-		'EmailConfirm' => array('Require Email Confirmation', 'Require Email Confirmation'),
-		'EmailContarct' => array('Email Contact on Register', 'Email Contact on Register'),
-		'notifytext' => array('Notify me via Text', 'Notify me via Text'),
-		'notifyemail' => array('Notify me via Email', 'Notify me via Email')
-	);
-		
 	
 	
 	/*
@@ -80,11 +73,7 @@ class GravityFormCustomCRM{
 		add_action('admin_menu', array(get_class(), 'admin_menu_crm'));
 		
 		add_shortcode('crm_reseller_id', array(get_class(), 'set_reseller_id'));
-		
-		//form settings to be saved
-		//add_action('gform_after_save_form', array(get_class(), 'gform_after_save_form'));
-		//add_action('init', array(get_class(), 'gform_after_save_form'));
-		
+				
 	//	add_action('init', array(get_class(), 'soap_checking'));
 		
 	}
@@ -110,21 +99,25 @@ class GravityFormCustomCRM{
 	 * Options page content
 	 */
 	static function options_page_content(){
-		if($_POST['Crm_saved'] == 'Y'){			
-			$data = array(
-				'crm_url' => trim($_POST['crm_url']),
-				'crm_user' => trim($_POST['crm_user']),
-				'crm_pass' =>  trim($_POST['crm_pass'])
-			);
-			
-			update_option('gravity_form_crm_ssl_enabled', $_POST['crm_ssl']);
-			update_option('gravity_form_crm_url', $data);
-			update_option('gravity_form_crm_ssl_dir', trim($_POST['crm_ssl_dir']));
+		if($_POST['Crm_saved'] == 'Y'){
+			$data = array();				
+			foreach($_POST as $key => $value){
+				if(strstr($key, 'crm_')){
+					$data[$key] = trim($value);
+				}
+			}
+
+			update_option('custom_crm_credentials', $data);
 		}
-		$url_info = get_option('gravity_form_crm_url');
-		$ssl = get_option('gravity_form_crm_ssl_enabled');
-		$ssl_dir = get_option('gravity_form_crm_ssl_dir');
+
+		$credentials = self::get_crm_credentials();		
 		include dirname(__FILE__) . '/includes/options-page.php';
+	}
+	
+	
+	//return the crm credentials
+	static function get_crm_credentials(){
+		return get_option('custom_crm_credentials');		
 	}
 	
 	
@@ -163,11 +156,7 @@ class GravityFormCustomCRM{
 		foreach(self::$gftooltips_profile as $key=>$value){		
 			$gf_tooltips['customcrm_'.$key] = '<h6>' . __($value[0]) . '</h6>' . __($value[1]);
 		}
-		
-		foreach(self::$gftooltips_policy as $key=>$value){		
-			$gf_tooltips['customcrm_'.$key] = '<h6>' . __($value[0]) . '</h6>' . __($value[1]);
-		}
-		
+			
 		return $gf_tooltips;
 	}
 	
@@ -243,7 +232,7 @@ class GravityFormCustomCRM{
 			$str .= '>'.$_field[1].'</option>'."\n";
 		}
 		$str .= '</select>'."\n";
-		$str .= '<script> jQuery("#'.$field_name.'").val( form.'.$field_name.'); </script>'."\n";
+		$str .= '<script> jQuery("#'.$field_name.'").val(form.'.$field_name.'); </script>'."\n";
 		return $str;
 	}
 	
@@ -252,12 +241,12 @@ class GravityFormCustomCRM{
 	//get form text field
 	static function get_text_field($form_id, $field_name, $value = null) {
 		$str = '<input style="width:100%" type="text" id="'.$field_name.'" value="" onblur=\'ChangeCustomCRMfield("'.$field_name.'");\'>';
-		$str .= '<script> jQuery("#'.$field_name.'").val( form.'.$field_name.'); </script>'."\n";
+		$str .= '<script> jQuery("#'.$field_name.'").val(form.'.$field_name.'); </script>'."\n";
 		return $str;
 	}
 	
 	
-	//get setting selector
+	//get setting selector here swithing is used
 	static function get_settings_selector($form_id, $field_name, $value = null){
 		switch ($field_name){
 			case "gravity_form_campaign" :
@@ -276,10 +265,19 @@ class GravityFormCustomCRM{
 				return self::get_settings_field_selector(self::contactRating_selector(), $form_id, $field_name, null);
 				break;
 				
-			case "gravity_form_emailConformation" :
-			case "gravity_form_emailContactOnRegister" :
-			case "gravity_form_notifyViaText" :
-			case "gravity_form_notifyViaEmail" :
+			case "RequireEmailConfirmed" :
+				return self::get_settings_field_selector(self::boolean_selector(), $form_id, $field_name, null);
+				break;
+			case "EmailContactOnRegister" :
+				return self::get_settings_field_selector(self::boolean_selector(), $form_id, $field_name, null);
+				break;
+			case "SMSUserOnRequestedInfo" :
+				return self::get_settings_field_selector(self::boolean_selector(), $form_id, $field_name, null);
+				break;
+			case "SMSUserOnRegister" :
+				return self::get_settings_field_selector(self::boolean_selector(), $form_id, $field_name, null);
+				break;
+			case "EmailUserOnRegister" :
 				return self::get_settings_field_selector(self::boolean_selector(), $form_id, $field_name, null);
 				break;
 		}
@@ -391,7 +389,7 @@ class GravityFormCustomCRM{
 	
 	
 	
-	//contact rating selector
+	//contact rating selector 
 	static function contactRating_selector(){
 		$digit = array(0, 1, 2, 3, 4, 5);
 		$c = array();
@@ -420,7 +418,7 @@ class GravityFormCustomCRM{
 		}
 		
 		$str .= '</select>'."\n";
-		$str .= '<script> jQuery("#'.$field_name.'").val( form.'.$field_name.'); </script>'."\n";
+		$str .= '<script> jQuery("#'.$field_name.'").val(form.'.$field_name.'); </script>'."\n";
 		return $str;		
 	}
 	
