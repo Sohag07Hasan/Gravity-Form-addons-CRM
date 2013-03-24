@@ -41,19 +41,38 @@ class Form_submission_To_CRM{
 	static function push($entry, $form){
 		
 		if(!$form['customcrm_enabled']) return;	
-			
+
+		//add request
 		ob_start();
 		include CRMGRAVITYDIR . '/classes/includes/xml-generator/AddRequest.php';
-		$xml = ob_get_contents();
+		$AddRequest = ob_get_contents();
 		ob_end_clean();
-		die();
+		$crm = new Gravity_form_CRM();
+		var_dump($AddRequest);
+		$response = $crm->addRequest($AddRequest);
+		//var_dump($AddRequest);	
+		//var_dump($response);
 		
-		/*
-		$name = 'AddRequest.xml';
-		header('Content-type: text/xml');
-		header("Content-disposition: attachment;filename=$name");
-		echo $xml;
-		*/
+		
+		//add to campaign
+		ob_start();
+		include CRMGRAVITYDIR . '/classes/includes/xml-generator/AddContactCampaign.php';
+		$AddCotactCampaign = ob_get_contents();
+		ob_end_clean();
+		var_dump($AddCotactCampaign);
+		$response = $crm->addContactCampaign($AddCotactCampaign);
+		//var_dump($AddCotactCampaign);
+		//var_dump($response);
+		
+		//add group
+		ob_start();
+		include CRMGRAVITYDIR . '/classes/includes/xml-generator/AddContactGroup.php';
+		$AddCotactGroup = ob_get_contents();
+		ob_end_clean();
+		var_dump($AddCotactGroup);
+		$response = $crm->addContactGroup($AddCotactGroup);
+		//var_dump($AddCotactGroup);
+		//var_dump($response);
 		
 		die();
 		

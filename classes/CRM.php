@@ -10,8 +10,10 @@ class Gravity_form_CRM{
 	
 	const user_proxy_url = 'https://secure.1parkplace.com/api/1.0/userproxy.asmx';
 	const contact_proxy_url = 'https://secure.1parkplace.com/api/1.0/contactproxy.asmx';
-		
 	
+	
+	//push urls
+	const AddRequest = 'https://secure.1parkplace.com/api/1.0/contactproxy.asmx';
 	
 	
 	//post handler by curl
@@ -108,10 +110,10 @@ class Gravity_form_CRM{
 		$http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 		curl_close($ch);	
 		
-		/*
-		var_dump($response);
+				
 		var_dump($http_code);
-		*/
+		var_dump($response);
+		
 		if($http_code == 200){
 			return $response;
 		}
@@ -121,5 +123,29 @@ class Gravity_form_CRM{
 	 	
 	 }
 	
+	 
+	 /******************************************************************************************************************
+	  *	  * Form Submitted Data to push to the crm
+	  * */
+	 function addRequest($data){
+	 	$url = self::AddRequest;
+	 	$action = '"https://secure.1parkplace.com/api/1.0/AddRequest"';
+	 	return $this->authRequest('POST', $url, $data, $action);
+	 }
 	
+	 
+	 //add contact campaign
+	 function addContactCampaign($data){
+	 	$url = self::AddRequest;
+	 	$action = '"https://secure.1parkplace.com/api/1.0/AddContactCampaign"';
+	 	return $this->authRequest('POST', $url, $data, $action);
+	 }
+	 
+	 
+ 	//add contact gorup
+	 function addContactGroup($data){
+	 	$url = self::AddRequest;
+	 	$action = '"https://secure.1parkplace.com/api/1.0/AddContactGroup"';
+	 	return $this->authRequest('POST', $url, $data, $action);
+	 }
 }

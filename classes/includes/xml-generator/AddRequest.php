@@ -1,7 +1,7 @@
 <?php echo '<?xml version="1.0" encoding="utf-8"?>' ?>
 
 <soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
-	<soap:Body>
+	<soap:Body>	
 		<AddRequest xmlns="https://secure.1parkplace.com/api/1.0/">
 			<credentials>		       
 		        <Username><?php echo Gravity_form_CRM::username; ?></Username>
@@ -29,7 +29,9 @@
 			foreach(GravityFormCustomCRM::$gftooltips_policy as $key => $value){
 				$v = ($value == 1) ? 1 : 0;
 				?>
-				<<?php echo $key; ?>><?php echo $v; ?></<?php echo $key?>>
+				<<?php echo $key; ?>>
+					<State><?php echo $v; ?></State>
+				</<?php echo $key?>>
 				<?php 
 			}
 			?>
