@@ -4,9 +4,9 @@
 	<soap:Body>	
 		<AddRequest xmlns="https://secure.1parkplace.com/api/1.0/">
 			<credentials>		       
-		        <Username><?php echo Gravity_form_CRM::username; ?></Username>
-		         <Password><?php echo Gravity_form_CRM::pass; ?></Password>
-		        <TypeID><?php echo Gravity_form_CRM::TypeID; ?></TypeID>
+		        <Username><?php echo $crm->username; ?></Username>
+		         <Password><?php echo $crm->pass; ?></Password>
+		        <TypeID><?php echo $crm->TypeID; ?></TypeID>
 			</credentials>
 			<profile>
 				<?php 
@@ -17,12 +17,30 @@
 				}
 				
 				foreach(GravityFormCustomCRM::$gftooltips_additional_profile as $key => $value){
+					if($key == 'gravity_form_user_id' && empty($form[$key])){
+						$form_data = $crm->refUserId;
+					}
+					else{
+						$form_data = $form[$key];
+					}
 					?>
-					<<?php echo $value; ?>><?php echo $form[$key]; ?></<?php echo $value; ?>>
+					<<?php echo $value; ?>><?php echo $form_data; ?></<?php echo $value; ?>>
 					<?php 
-				}
-				
+				}				
 				?>
+				
+				<ReferringUserId><?php echo $crm->refUserId; ?></ReferringUserId>
+				<Password><?php echo $crm->refPass; ?></Password>
+				<ContactComments>
+					<?php 
+						
+						foreach(GravityFormCustomCRM::$gftooltips_comments as $key => $value){
+							echo $entry[$form['customcrm_'.$key]] . ', ';	
+						}
+					?>
+				</ContactComments>
+				
+				
 			</profile>
 			<policy>
 			<?php 

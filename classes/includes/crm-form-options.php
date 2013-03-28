@@ -93,5 +93,17 @@
 			</tr>
 	
 	<?php endforeach; ?>
+	
+	<?php
+		foreach(self::$gftooltips_comments as $key=>$value) :
+			$key = 'customcrm_' . $key;
+	?>
+	
+			<tr>
+				<td align="right"><?php echo $value[0] ?></td>
+				<td><?php echo self::get_field_selector($form_id, $key); ?> <?php gform_tooltip($key) ?></td>
+			</tr>
+	
+	<?php endforeach; ?>
 		
 </table>

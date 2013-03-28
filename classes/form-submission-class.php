@@ -39,19 +39,17 @@ class Form_submission_To_CRM{
 	 * Receive the submitted form data
 	 */
 	static function push($entry, $form){
-		
+				
 		if(!$form['customcrm_enabled']) return;	
-
+		$crm = new Gravity_form_CRM();
+		
 		//add request
 		ob_start();
 		include CRMGRAVITYDIR . '/classes/includes/xml-generator/AddRequest.php';
 		$AddRequest = ob_get_contents();
 		ob_end_clean();
-		$crm = new Gravity_form_CRM();
-		var_dump($AddRequest);
 		$response = $crm->addRequest($AddRequest);
-		//var_dump($AddRequest);	
-		//var_dump($response);
+		
 		
 		
 		//add to campaign
@@ -59,65 +57,21 @@ class Form_submission_To_CRM{
 		include CRMGRAVITYDIR . '/classes/includes/xml-generator/AddContactCampaign.php';
 		$AddCotactCampaign = ob_get_contents();
 		ob_end_clean();
-		var_dump($AddCotactCampaign);
 		$response = $crm->addContactCampaign($AddCotactCampaign);
-		//var_dump($AddCotactCampaign);
-		//var_dump($response);
+		
 		
 		//add group
 		ob_start();
 		include CRMGRAVITYDIR . '/classes/includes/xml-generator/AddContactGroup.php';
 		$AddCotactGroup = ob_get_contents();
 		ob_end_clean();
-		var_dump($AddCotactGroup);
 		$response = $crm->addContactGroup($AddCotactGroup);
-		//var_dump($AddCotactGroup);
-		//var_dump($response);
-		
+				
 		die();
-		
-		//$status = self::xml_put($xml);
 			
 	}
 	
 	
-	/*
-	 * xml data put to the remote CRM
-	 * returns the response xml
-	 * makes put request
-	 */
-	static function xml_put($xml){
-		$url = GravityFormCustomCRM :: get_crm_url();
-		
-		$ch = curl_init(); 
-		curl_setopt($ch, CURLOPT_URL, $url); 
-		
-		//ssl operation
-		if(GravityFormCustomCRM :: ssl_enabled()){
-			curl_setopt($ch, CURLOPT_CAINFO, GravityFormCustomCRM::get_ssl_certificate());
-			curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 1);
-			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, TRUE);
-		}
-		
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
-		curl_setopt($ch, CURLOPT_TIMEOUT, 20);
-		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
-		curl_setopt($ch, CURLOPT_POSTFIELDS, $xml); 
-		curl_setopt($ch, CURLOPT_HTTPHEADER, array('Connection: close'));       
-		$result = curl_exec($ch); 
-		curl_close($ch);
-		
-		return self::parse_returned_xml($result);
-	}
-	
-	/*
-	 * parsing the reslultant xml
-	 */
-	static function parse_returned_xml($str=''){
-		$xml = @simplexml_load_string($str);
-		if(!$xml) return 2;
-		return (strtolower($xml->result) == 'ok') ? 1 : 2;
-	}
 	
 	/*
 	 * validates the input field

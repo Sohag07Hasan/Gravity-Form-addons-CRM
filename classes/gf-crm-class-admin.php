@@ -26,17 +26,25 @@ class GravityFormCustomCRM{
 		'AgentCompany' => array('AgentCompany', 'AgentCompany'),
 		'AgentName' => array('AgentName', 'AgentName'),
 		'HasAgent' => array('HasAgent', 'HasAgent'),
+		'ReferrerURL' => array('ReferrerURL', 'ReferrerURL'),
 		'FirstName' => array('First Name', 'FirstName'),
 		'LastName' => array('Last Name', 'LastName'),
 		'EmailPrimary' => array('Email Primary', 'EmailPrimary'),
 		'EmailSecondary' => array('Email Secondary', 'EmailSecondary'),
-		'MeetingDate' => array('Meeting Date', 'Meeting Date'),		
+		'MeetingDate' => array('Meeting Date', 'Meeting Date')				
+		
+	);
+	
+	
+	/*
+	 * Comments sections are also to be handled separately
+	 * */
+	public static $gftooltips_comments = array(
 		'ContactComments_1' => array('ContactComments 01', 'ContactComments 01'),
 		'ContactComments_2' => array('ContactComments 02', 'ContactComments 02'),
 		'ContactComments_3' => array('ContactComments 03', 'ContactComments 03'),
 		'ContactComments_4' => array('ContactComments 04', 'ContactComments 04'),
-		'ContactComments_5' => array('ContactComments 05', 'ContactComments 05'),	
-		
+		'ContactComments_5' => array('ContactComments 05', 'ContactComments 05'),
 	);
 	
 	
@@ -81,9 +89,8 @@ class GravityFormCustomCRM{
 	
 	static function soap_checking(){
 		$crm = new Gravity_form_CRM();
-		self::contactGroup_selector(null, null, null);
-		
-		var_dump(self::campaign_selector(null, null, null));
+			
+		self::contactGroup_selector();
 		
 		die();
 	}

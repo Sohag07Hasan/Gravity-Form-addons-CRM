@@ -8,12 +8,34 @@ class Gravity_form_CRM{
 	const TypeID = "Vendor";
 	const user_id = 40572;
 	
+	
+	//some properties
+	public $username;
+	public $pass;
+	public $TypeID;
+	public $refUserId;
+	public $refPass;
+	
+	
 	const user_proxy_url = 'https://secure.1parkplace.com/api/1.0/userproxy.asmx';
 	const contact_proxy_url = 'https://secure.1parkplace.com/api/1.0/contactproxy.asmx';
 	
 	
 	//push urls
 	const AddRequest = 'https://secure.1parkplace.com/api/1.0/contactproxy.asmx';
+	
+	
+	//constructor function
+	function __construct(){
+		$credentials = GravityFormCustomCRM::get_crm_credentials();
+		
+		//assign the private properties
+		$this->username = $credentials['crm_UserName'];
+		$this->pass = $credentials['crm_Pass'];
+		$this->TypeID = $credentials['crm_TypeId'];
+		$this->refUserId = $credentials['crm_UserId'];
+		$this->refPass = $credentials['crm_genPass'];		
+	}
 	
 	
 	//post handler by curl
@@ -43,7 +65,7 @@ class Gravity_form_CRM{
 		<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
 		  <soap:Body>
 		    <GetUserCampaigns xmlns="https://secure.1parkplace.com/api/1.0/">
-		      <userID>'.self::user_id.'</userID>
+		      <userID>'.$this->refUserId.'</userID>
 		    </GetUserCampaigns>
 		  </soap:Body>
 		</soap:Envelope>' ;
@@ -61,7 +83,7 @@ class Gravity_form_CRM{
 		<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
 		  <soap:Body>
 		    <GetUserContactGroups xmlns="https://secure.1parkplace.com/api/1.0/">
-		      <userID>'.self::user_id.'</userID>
+		      <userID>'.$this->refUserId.'</userID>
 		    </GetUserContactGroups>
 		  </soap:Body>
 		</soap:Envelope>';
@@ -79,7 +101,7 @@ class Gravity_form_CRM{
 		<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
 		  <soap:Body>
 		    <GetUserCustomLeadSources xmlns="https://secure.1parkplace.com/api/1.0/">
-		      <userID>'.self::user_id.'</userID>
+		      <userID>'.$this->refUserId.'</userID>
 		    </GetUserCustomLeadSources>
 		  </soap:Body>
 		</soap:Envelope>' ;
@@ -108,11 +130,15 @@ class Gravity_form_CRM{
 	 	//curl execution
 	 	$response = curl_exec($ch);	 	
 		$http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+		$status = curl_getinfo($ch);
 		curl_close($ch);	
 		
-				
-		var_dump($http_code);
-		var_dump($response);
+	//	var_dump($data);
+		
+	//	var_dump($status);
+		
+	
+	//	var_dump($response);
 		
 		if($http_code == 200){
 			return $response;
