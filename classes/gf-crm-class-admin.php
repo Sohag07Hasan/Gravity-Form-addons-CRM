@@ -26,7 +26,7 @@ class GravityFormCustomCRM{
 		'AgentCompany' => array('AgentCompany', 'AgentCompany'),
 		'AgentName' => array('AgentName', 'AgentName'),
 		'HasAgent' => array('HasAgent', 'HasAgent'),
-		'ReferrerURL' => array('ReferrerURL', 'ReferrerURL'),
+	//	'ReferrerURL' => array('ReferrerURL', 'ReferrerURL'),
 		'FirstName' => array('First Name', 'FirstName'),
 		'LastName' => array('Last Name', 'LastName'),
 		'EmailPrimary' => array('Email Primary', 'EmailPrimary'),
@@ -311,10 +311,14 @@ class GravityFormCustomCRM{
 	//campaigns are fetched and handled
 	static function campaign_selector(){
 		$crm = new Gravity_form_CRM();
-		$campaigns_xml = $crm->get_campaigns(0);
+		
+		$response = $crm->get_campaigns(0);		
+		$campaigns_xml = $response['response'];
+		
+		
 		$c = array();
 		
-		if($campaigns_xml){
+		if($response['status_code'] == 200){
 			$xml = simplexml_load_string($campaigns_xml);
 			$namespace = $xml->getNamespaces(true);
 			$xml->registerXPathNamespace('c', $namespace['soap']);
@@ -340,10 +344,12 @@ class GravityFormCustomCRM{
 	//contact group selector
 	static function contactGroup_selector(){
 		$crm = new Gravity_form_CRM();
-		$contact_group_xml = $crm->get_contactGroups(0);
+		
+		$response = $crm->get_contactGroups(0);		
+		$contact_group_xml = $response['response'];
 		$c = array();
 			
-		if($contact_group_xml){
+		if($response['status_code'] == 200){
 			$xml = simplexml_load_string($contact_group_xml);
 			$namespace = $xml->getNamespaces(true);
 			$xml->registerXPathNamespace('c', $namespace['soap']);
@@ -370,10 +376,11 @@ class GravityFormCustomCRM{
 	//lead selector
 	static function leadSource_selector(){
 		$crm = new Gravity_form_CRM();
-		$leadSource_xml = $crm->get_leadSources(0);
+		$response = $crm->get_leadSources(0);
+		$leadSource_xml = $response['response'];
 		$c = array();
 		
-		if($leadSource_xml){
+		if($response['status_code']){
 			$xml = simplexml_load_string($leadSource_xml);
 			$namespace = $xml->getNamespaces(true);
 			$xml->registerXPathNamespace('c', $namespace['soap']);
@@ -398,12 +405,12 @@ class GravityFormCustomCRM{
 	
 	//contact rating selector 
 	static function contactRating_selector(){
-		$digit = array(0, 1, 2, 3, 4, 5);
+		$digit = array(1, 2, 3, 4, 5);
 		$c = array();
 		foreach($digit as $d){
 			$c[] = array(
 				'id' => $d,
-				'name' => $d
+				'name' => $d . ' star'
 			);
 		}
 		

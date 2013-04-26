@@ -139,13 +139,14 @@ class Gravity_form_CRM{
 		
 	
 	//	var_dump($response);
-		
-		if($http_code == 200){
-			return $response;
-		}
-		else{
-			return false;
-		}
+	
+		return array(
+			'status_code' => $http_code,
+			'response' => $response,
+			'http' => $status,
+			'request' => $data
+		);
+			
 	 	
 	 }
 	

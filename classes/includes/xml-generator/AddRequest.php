@@ -29,6 +29,8 @@
 				}				
 				?>
 				
+				<ReferrerURL><?php echo $entry['source_url']; ?></ReferrerURL>
+				
 				<ReferringUserId><?php echo $crm->refUserId; ?></ReferringUserId>
 				<Password><?php echo $crm->refPass; ?></Password>
 				<ContactComments>
@@ -45,7 +47,7 @@
 			<policy>
 			<?php 
 			foreach(GravityFormCustomCRM::$gftooltips_policy as $key => $value){
-				$v = ($value == 1) ? 1 : 0;
+				$v = ($form[$key] == 1) ? 1 : 0;
 				?>
 				<<?php echo $key; ?>>
 					<State><?php echo $v; ?></State>

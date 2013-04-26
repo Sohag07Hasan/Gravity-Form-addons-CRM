@@ -21,8 +21,9 @@ class Form_submission_To_CRM{
 		//add_filter('gform_validation', array(get_class(), 'validate'), 100);		
 	}
 	
-	/**
-	 * tracomg crm data
+	
+	/*
+	 * tracing crm data
 	 */
 	static function tracing_crm_data($lead_id, $status){
 		$table = Offline_CRM::get_offline_table();
@@ -50,7 +51,13 @@ class Form_submission_To_CRM{
 		ob_end_clean();
 		$response = $crm->addRequest($AddRequest);
 		
+		header('Content-type: text/xml');
+		header('Content-Disposition: attachment; filename="addRequest.xml"');
+		echo $response['request'];
 		
+	//	var_dump($response);
+		
+		die();
 		
 		//add to campaign
 		ob_start();
@@ -58,7 +65,7 @@ class Form_submission_To_CRM{
 		$AddCotactCampaign = ob_get_contents();
 		ob_end_clean();
 		$response = $crm->addContactCampaign($AddCotactCampaign);
-		
+//		var_dump($response);
 		
 		//add group
 		ob_start();
@@ -66,65 +73,11 @@ class Form_submission_To_CRM{
 		$AddCotactGroup = ob_get_contents();
 		ob_end_clean();
 		$response = $crm->addContactGroup($AddCotactGroup);
+		
+//		var_dump($response);
 				
-		die();
+	//	die();
 			
 	}
-	
-	
-	
-	/*
-	 * validates the input field
-	 */
-	static function validate($validation_result){		
-		// 2 - Get the form object from the validation result
-		$form = $validation_result["form"];
 		
-		//if the crm is attached
-		if($form['customcrm_enabled']){
-			// 3 - Get the current page being validated
-			$current_page = rgpost('gform_source_page_number_' . $form['id']) ? rgpost('gform_source_page_number_' . $form['id']) : 1;
-			
-			//loop thouth the form fields
-			foreach($form['fields'] as &$field){
-				// 6 - Get the field's page number
-				$field_page = $field['pageNumber'];
-
-				// 7 - Check if the field is hidden by GF conditional logic
-				$is_hidden = RGFormsModel::is_field_hidden($form, $field, array());
-
-				// 8 - If the field is not on the current page OR if the field is hidden, skip it
-				if($field_page != $current_page || $is_hidden) continue;
-				
-				switch(RGFormsModel::get_input_type($field)){
-					case "address" :
-						if($field["isRequired"])
-							{
-							$street = $_POST["input_" . $field["id"] . "_1"];
-							$city = $_POST["input_" . $field["id"] . "_3"];
-							$state = $_POST["input_" . $field["id"] . "_4"];
-							$zip = $_POST["input_" . $field["id"] . "_5"];
-							$country = $_POST["input_" . $field["id"] . "_6"];
-							if(empty($street) || empty($city) || empty($zip) || (empty($state) && !$field["hideState"] ) || (empty($country) && !$field["hideCountry"])){
-								$field["failed_validation"] = true;
-								$field["validation_message"] = empty($field["errorMessage"]) ? __("This field is required. Please enter a complete address.", "gravityforms") : $field["errorMessage"];
-							}
-							if(!is_numeric($zip)){
-								$field["failed_validation"] = true;
-								$field["validation_message"] = __("Zip code must be numeric");
-							}
-							
-						}
-
-					break;
-				}
-				
-			}
-			
-		}
-		
-		$validation_result['form'] = $form;
-		return $validation_result;
-		
-	}
 }

@@ -35,6 +35,7 @@
 					<?php 
 						
 						foreach(GravityFormCustomCRM::$gftooltips_comments as $key => $value){
+							if(empty($entry[$form['customcrm_'.$key]])) continue;
 							echo $entry[$form['customcrm_'.$key]] . ', ';	
 						}
 					?>
