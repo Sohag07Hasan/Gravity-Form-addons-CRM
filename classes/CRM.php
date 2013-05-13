@@ -23,6 +23,7 @@ class Gravity_form_CRM{
 	
 	//push urls
 	const AddRequest = 'https://secure.1parkplace.com/api/1.0/contactproxy.asmx';
+	//const AddRequest = 'https://secure.1parkplace.com/api/1.0/contactproxy.asm';
 	
 	
 	//constructor function
@@ -143,8 +144,8 @@ class Gravity_form_CRM{
 		return array(
 			'status_code' => $http_code,
 			'response' => $response,
-			'http' => $status,
-			'request' => $data
+		//	'http' => $status,
+		//	'request' => $data
 		);
 			
 	 	
@@ -175,4 +176,7 @@ class Gravity_form_CRM{
 	 	$action = '"https://secure.1parkplace.com/api/1.0/AddContactGroup"';
 	 	return $this->authRequest('POST', $url, $data, $action);
 	 }
+	 
+	  
+	 
 }

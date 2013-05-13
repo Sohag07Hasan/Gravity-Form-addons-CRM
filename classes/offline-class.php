@@ -11,6 +11,10 @@
 
 Class Offline_CRM{
 	
+	const hook = "psuh_gf_to_crm";
+	const interval = 'twicedaily';
+	
+	
 	/*
 	 * contain the hooks
 	 */
@@ -18,15 +22,23 @@ Class Offline_CRM{
 						
 		//creating table to store information if the crm is down
 		register_activation_hook(CRMGRAVITYFILE, array(get_class(), 'create_offline_table'));
-				
-	}
+		register_deactivation_hook(CRMGRAVITYFILE, array(get_class(), 'deactivate_scheduler'));
+
+		add_action(self::hook, array(get_class(), 'process_scheduler'));
 		
+		add_action('init', array(get_class(), 'test'));
+	}
+	
+	
+	static function test(){
+		return self::process_offline_leads();
+	}
 	
 	
 	/*
 	 * main function to process the schulde
 	 */
-	static function process_schudle(){
+	static function process_scheduler(){
 		return self::process_offline_leads();
 	}
 	
@@ -36,11 +48,15 @@ Class Offline_CRM{
 	 * tracing table
 	 */
 	static function create_offline_table(){
+		
+		self::activate_the_scheduler();
+		
 		$table = self::get_offline_table();
 		$sql = "CREATE TABLE IF NOT EXISTS $table(
 			`id` bigint unsigned NOT NULL AUTO_INCREMENT,			
-			`lead_id` bigint unsigned NOT NULL,	
-			`crm_status` tinyint DEFAULT 1,
+			`lead_id` bigint unsigned NOT NULL,
+			`log` text not null,		
+			`try_count` int DEFAULT 0,
 			PRIMARY KEY(id),
 			UNIQUE(lead_id)	 
 		)";
@@ -50,6 +66,22 @@ Class Offline_CRM{
 		endif;
 		dbDelta($sql);
 	}
+	
+	
+	/*
+	 * activate the scheduler
+	 * */
+	static function activate_the_scheduler(){
+		if(!wp_next_scheduled(self::hook)) {
+			wp_schedule_event( current_time( 'timestamp' ), self::interval, self::hook);
+		}
+	}
+	
+	
+	static function deactivate_scheduler(){
+		wp_clear_scheduled_hook(self::hook);
+	}
+	
 	
 	/*
 	 * return the tracing table
@@ -66,8 +98,9 @@ Class Offline_CRM{
 	static function get_failed_leads(){
 		$table = self::get_offline_table();
 		global $wpdb;
-		return $wpdb->get_col("SELECT `lead_id` FROM $table WHERE crm_status = 2");
+		return $wpdb->get_col("SELECT `lead_id` FROM $table WHERE try_count < 10 ");
 	}
+	
 	
 	
 	/*
@@ -77,31 +110,60 @@ Class Offline_CRM{
 	 */
 	static function process_offline_leads(){
 		$offline_leads = self::get_failed_leads();
-		if(empty($offline_leads)) return;
 		
-		//remove and create new actions
-		remove_action('xml_pushed_to_crm', array('Form_submission_To_CRM', 'tracing_crm_data'));
-		//new action
-		add_action('xml_pushed_to_crm', array(get_class(), 'update_tracing_data'), 10, 2);
+		if(empty($offline_leads)) return;
+			
 		
 		foreach($offline_leads as $lead){
 			$entry = RGFormsModel::get_lead($lead);
 			$form = RGFormsModel::get_form_meta($entry['form_id']);
-			Form_submission_To_CRM :: push($entry, $form);
+						
+			Form_submission_To_CRM :: push($entry, $form, false);
 		}
 	}
 	
 	
+	//delete a lead	
+	static function remove_a_lead($lead_id){
+		global $wpdb;
+		$table = self::get_offline_table();
+		return $wpdb->query("delete from $table where lead_id = '$lead_id'");
+	} 
+	
 	/*
 	 * updates tracing tabel data while a offline xml data is pushed to the CRM
 	 */
-	static function update_tracing_data($lead_id, $status){
+	static function update_a_lead($lead_id, $log){
 		$table = self::get_offline_table();
 		global $wpdb;
-		$wpdb->update($table, array('crm_status'=>(int)$status), array('lead_id'=>(int)$lead_id), array('%d'), array('%d'));
+		
+		$lead = self::get_lead($lead_id);
+		$try_count = $lead->try_count + 1; 
+		
+		$wpdb->update($table, array('log'=>serialize($log), 'try_count'=>$try_count), array('lead_id'=>$lead_id));
 		
 	}
 	
+	
+	//return the lead rows
+	static function get_lead($lead_id){
+		$table = self::get_offline_table();
+		global $wpdb;
+		
+		return $wpdb->get_row("select * from $table where lead_id = '$lead_id'");
+	}
+	
+	
+	/*
+	 * add a failed leads
+	 * */
+	
+	static function add_a_lead($lead_id, $log){
+		global $wpdb;
+		$table = self::get_offline_table();
+		
+		return $wpdb->insert($table, array('lead_id'=>$lead_id, 'log'=>serialize($log)), array('%d', '%s'));
+	}
 	
 	
 }
