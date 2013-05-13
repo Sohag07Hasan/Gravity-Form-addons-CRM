@@ -11,6 +11,8 @@
 			<profile>
 				<?php 
 				foreach(GravityFormCustomCRM::$gftooltips_profile as $key => $value){
+					if(empty($entry[$form['customcrm_'.$key]])) continue;
+					
 					?>
 					<<?php echo $key; ?>><?php echo $entry[$form['customcrm_'.$key]];?></<?php echo $key?>>
 					<?php 	

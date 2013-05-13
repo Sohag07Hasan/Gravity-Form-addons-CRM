@@ -12,8 +12,8 @@
 <table cellspacing="5" cellpadding="5">
 
 	<tr>
-		<td align="right"> Assign to This User ID </td>
-		<td> <?php echo self::get_text_field($form_id, 'gravity_form_user_id'); ?> </td>
+		<td align="right"> Assign to This User ID  </td>
+		<td> <?php echo self::get_text_field($form_id, 'gravity_form_user_id'); ?> <?php gform_tooltip('UserId'); ?> </td>
 	</tr>	
 	<tr>
 		<td align="right"> Assign Contact to Campaign </td>

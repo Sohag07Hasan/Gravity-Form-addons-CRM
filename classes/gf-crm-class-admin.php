@@ -31,8 +31,8 @@ class GravityFormCustomCRM{
 		'LastName' => array('Last Name', 'LastName'),
 		'EmailPrimary' => array('Email Primary', 'EmailPrimary'),
 		'EmailSecondary' => array('Email Secondary', 'EmailSecondary'),
-		'MeetingDate' => array('Meeting Date', 'Meeting Date')				
-		
+		'MeetingDate' => array('Meeting Date', 'Meeting Date'),				
+		'StatusID' => array('Status Id', 'Status Id')
 	);
 	
 	
@@ -164,6 +164,8 @@ class GravityFormCustomCRM{
 			$gf_tooltips['customcrm_'.$key] = '<h6>' . __($value[0]) . '</h6>' . __($value[1]);
 		}
 			
+		$gf_tooltips['UserId'] = '<h6> User ID </h6>' . 'If empty, default one will be used';
+		
 		return $gf_tooltips;
 	}
 	
@@ -228,10 +230,14 @@ class GravityFormCustomCRM{
 	/*
 	 * Selector fields
 	 */
-	public static function get_field_selector($form_id, $field_name, $selected_field = null) {
+	public static function get_field_selector($form_id, $field_name, $selected_field = null ) {
 		$form_fields = self::get_form_fields($form_id);
 		$str = '<select id="'.$field_name.'" size="1" onchange=\'ChangeCustomCRMfield("'.$field_name.'");\'>';
-		$str .= '<option value="">Choose</option>'."\n";
+		
+	
+			$str .= '<option value="">Choose</option>'."\n";
+		
+		
 		foreach($form_fields as $_field) 
 		{
 			$str .= '<option value="'.$_field[0].'"';
@@ -254,7 +260,7 @@ class GravityFormCustomCRM{
 	
 	
 	//get setting selector here swithing is used
-	static function get_settings_selector($form_id, $field_name, $value = null){
+	static function get_settings_selector($form_id, $field_name, $value = null, $bool = 0){
 		switch ($field_name){
 			case "gravity_form_campaign" :
 				return self::get_settings_field_selector(self::campaign_selector(), $form_id, $field_name, null);
@@ -273,19 +279,19 @@ class GravityFormCustomCRM{
 				break;
 				
 			case "RequireEmailConfirmed" :
-				return self::get_settings_field_selector(self::boolean_selector(), $form_id, $field_name, null);
+				return self::get_settings_field_selector(self::boolean_selector(), $form_id, $field_name, null, 1);
 				break;
 			case "EmailContactOnRegister" :
-				return self::get_settings_field_selector(self::boolean_selector(), $form_id, $field_name, null);
+				return self::get_settings_field_selector(self::boolean_selector(), $form_id, $field_name, null, 1);
 				break;
 			case "SMSUserOnRequestedInfo" :
-				return self::get_settings_field_selector(self::boolean_selector(), $form_id, $field_name, null);
+				return self::get_settings_field_selector(self::boolean_selector(), $form_id, $field_name, null, 1);
 				break;
 			case "SMSUserOnRegister" :
-				return self::get_settings_field_selector(self::boolean_selector(), $form_id, $field_name, null);
+				return self::get_settings_field_selector(self::boolean_selector(), $form_id, $field_name, null, 1);
 				break;
 			case "EmailUserOnRegister" :
-				return self::get_settings_field_selector(self::boolean_selector(), $form_id, $field_name, null);
+				return self::get_settings_field_selector(self::boolean_selector(), $form_id, $field_name, null, 1);
 				break;
 		}
 	}
@@ -419,10 +425,14 @@ class GravityFormCustomCRM{
 	
 	
 	//settings fields selector
-	static function get_settings_field_selector($fields, $form_id, $field_name, $selected_field = null){					
+	static function get_settings_field_selector($fields, $form_id, $field_name, $selected_field = null, $bool = 0){					
 		
 		$str = '<select id="'.$field_name.'" size="1" onchange=\'ChangeCustomCRMfield("'.$field_name.'");\'>';
-		$str .= '<option value="">Choose</option>'."\n";
+		
+		if($bool == 0){
+			$str .= '<option value="">Choose</option>'."\n";
+		}
+		
 		if($fields){
 			foreach($fields as $_field){
 				$str .= '<option value="'.$_field['id'].'"';
