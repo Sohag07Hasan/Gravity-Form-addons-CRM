@@ -2,13 +2,7 @@
 //this class handles all the xml request to crm
 
 class Gravity_form_CRM{
-	
-	const username = "oneparkplace";
-	const pass = "123lanman";
-	const TypeID = "Vendor";
-	const user_id = 40572;
-	
-	
+		
 	//some properties
 	public $username;
 	public $pass;
@@ -144,8 +138,8 @@ class Gravity_form_CRM{
 		return array(
 			'status_code' => $http_code,
 			'response' => $response,
-		//	'http' => $status,
-		//	'request' => $data
+			'http' => $status,
+			'request' => $data
 		);
 			
 	 	

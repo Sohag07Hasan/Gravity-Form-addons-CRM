@@ -26,7 +26,7 @@ Class Offline_CRM{
 
 		add_action(self::hook, array(get_class(), 'process_scheduler'));
 		
-		add_action('init', array(get_class(), 'test'));
+		//add_action('init', array(get_class(), 'test'));
 	}
 	
 	
@@ -48,7 +48,7 @@ Class Offline_CRM{
 	 * tracing table
 	 */
 	static function create_offline_table(){
-		
+		global $wpdb;
 		self::activate_the_scheduler();
 		
 		$table = self::get_offline_table();
@@ -61,10 +61,7 @@ Class Offline_CRM{
 			UNIQUE(lead_id)	 
 		)";
 		
-		if(!function_exists('dbDelta')) :
-			include ABSPATH . 'wp-admin/includes/upgrade.php';
-		endif;
-		dbDelta($sql);
+		$wpdb->query($sql);
 	}
 	
 	
@@ -80,6 +77,17 @@ Class Offline_CRM{
 	
 	static function deactivate_scheduler(){
 		wp_clear_scheduled_hook(self::hook);
+		
+	//	self::delete_table();
+		
+	}
+	
+	
+	//delete the table
+	static function delete_table(){
+		global $wpdb;
+		$table = self::get_offline_table();
+		$wpdb->query("drop table $table");
 	}
 	
 	
@@ -98,7 +106,7 @@ Class Offline_CRM{
 	static function get_failed_leads(){
 		$table = self::get_offline_table();
 		global $wpdb;
-		return $wpdb->get_col("SELECT `lead_id` FROM $table WHERE try_count < 10 ");
+		return $wpdb->get_col("SELECT `lead_id` FROM $table WHERE try_count < 10 limit 100");
 	}
 	
 	

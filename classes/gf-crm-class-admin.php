@@ -32,7 +32,7 @@ class GravityFormCustomCRM{
 		'EmailPrimary' => array('Email Primary', 'EmailPrimary'),
 		'EmailSecondary' => array('Email Secondary', 'EmailSecondary'),
 		'MeetingDate' => array('Meeting Date', 'Meeting Date'),				
-		'StatusID' => array('Status Id', 'Status Id')
+		//'StatusID' => array('Status Id', 'Status Id')
 	);
 	
 	
@@ -411,7 +411,7 @@ class GravityFormCustomCRM{
 	
 	//contact rating selector 
 	static function contactRating_selector(){
-		$digit = array(1, 2, 3, 4, 5);
+		$digit = array(1, 2, 3, 4);
 		$c = array();
 		foreach($digit as $d){
 			$c[] = array(

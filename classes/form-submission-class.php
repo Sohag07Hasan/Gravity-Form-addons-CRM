@@ -33,6 +33,8 @@ class Form_submission_To_CRM{
 	 */
 	static function push($entry, $form, $is_new){
 		
+		return self::push_to_test($entry, $form, $is_new);
+		
 		if(!$form['customcrm_enabled']) return;	
 		
 		$lead_id = $entry['id'];
@@ -133,8 +135,8 @@ class Form_submission_To_CRM{
 	
 	//intake push function
 	
-	/*	 
-	static function push($entry, $form){
+	
+	static function push_to_test($entry, $form, $is_new){
 		
 		if(!$form['customcrm_enabled']) return;	
 		$crm = new Gravity_form_CRM();
@@ -182,6 +184,6 @@ class Form_submission_To_CRM{
 	}
 	
 	
-	*/	
+	
 		
 }

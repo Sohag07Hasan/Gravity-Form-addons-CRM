@@ -4,8 +4,7 @@
  * Plugin Name: Gravity Forms + Custom CRM
  * Author: Mahibul Hasan Sohag
  * Description: This addons creates a way to integrate the gravity form with a custom made CRM
- * Plugin URI: http://www.flyfighterjet.com/
- * Author URI: http://demo.sohag.me
+ * Author URI: http://sohag07hasan.elance.com
  */
 
 //defining some global constant
