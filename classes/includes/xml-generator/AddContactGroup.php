@@ -10,17 +10,31 @@
 			</credentials>
 			<profile>
 				<?php 
+				
 				foreach(GravityFormCustomCRM::$gftooltips_profile as $key => $value){
-					if(empty($entry[$form['customcrm_'.$key]])) continue;
+					
+					//filtering empty filed
+					if(empty($entry[$form['customcrm_'.$key]])){
+						continue;
+					}
+					elseif($key == 'HasAgent'){
+						$form_data = ($entry[$form['customcrm_'.$key]] == 1) ? 1 : 0;
+					}
+					else{
+						$form_data = $entry[$form['customcrm_'.$key]];
+					}
 					
 					?>
-					<<?php echo $key; ?>><?php echo $entry[$form['customcrm_'.$key]];?></<?php echo $key?>>
+					<<?php echo $key; ?>><?php echo $form_data;?></<?php echo $key?>>
 					<?php 	
 				}
 				
 				foreach(GravityFormCustomCRM::$gftooltips_additional_profile as $key => $value){
 					if($key == 'gravity_form_user_id' && empty($form[$key])){
 						$form_data = $crm->refUserId;
+					}
+					elseif($key == 'RequireEmailConfirmed'){
+						$form_data = ($form[$key] == 1) ? 1 : 0;
 					}
 					else{
 						$form_data = $form[$key];

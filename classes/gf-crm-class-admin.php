@@ -58,6 +58,7 @@ class GravityFormCustomCRM{
 	
 	
 	public static $gftooltips_policy = array(
+	//	'RequireEmailConfirmed' => array('EmailPrimaryConfirmed', 'EmailPrimaryConfirmed'),
 		'SMSUserOnRegister' => array('SMSUserOnRegister', 'SMSUserOnRegister'),
 		'SMSUserOnRequestedInfo' => array('SMSUserOnRequestedInfo', 'SMSUserOnRequestedInfo'),
 		'EmailUserOnRegister' => array('EmailUserOnRegister', 'EmailUserOnRegister'),
