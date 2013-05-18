@@ -48,6 +48,19 @@ class GravityFormCustomCRM{
 	);
 	
 	
+	
+	/*
+	 * Comment question
+	 * */
+	public static $gftooltips_questions = array(
+		'Questions_1' => array('Questions 01', 'Questions 01'),
+		'Questions_2' => array('Questions 02', 'Questions 02'),
+		'Questions_3' => array('Questions 03', 'Questions 03'),
+		'Questions_4' => array('Questions 04', 'Questions 04'),
+		'Questions_5' => array('Questions 05', 'Questions 05')
+	);
+	
+	
 	// these are to be handled differently
 	public static $gftooltips_additional_profile = array(
 		'gravity_form_user_id' => 'UserId',

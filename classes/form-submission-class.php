@@ -18,13 +18,19 @@ class Form_submission_To_CRM{
 	public static function init(){
 		//if the form is submitted
 		add_action("gform_after_submission", array(get_class(), 'push_to_crm'), 10, 2);
-		//add_filter('gform_validation', array(get_class(), 'validate'), 100);		
+	//	add_filter('gform_validation', array(get_class(), 'validate'), 100);		
 	}
 	
 	
 	//push to the crm
 	static function push_to_crm($entry, $form){
 		return self::push($entry, $form, true);
+		var_dump($form);
+		
+		var_dump($entry);
+		exit;
+		
+		
 	}
 	
 	
@@ -189,9 +195,8 @@ class Form_submission_To_CRM{
 		$is_valid = $data['is_valid'];		
 		$form = $data['form'];
 
-		if($form['customcrm_enabled']){
-			
-		}
+		var_dump($form);
+		exit;
 		
 	}
 	

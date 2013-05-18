@@ -49,11 +49,20 @@
 				<Password><?php echo $crm->refPass; ?></Password>
 				<ContactComments>
 					<?php 
-						
+						$ques_answer = array();
+					
 						foreach(GravityFormCustomCRM::$gftooltips_comments as $key => $value){
+							//echo $entry[$form['customcrm_'.$key]] . ', ';	
+
 							if(empty($entry[$form['customcrm_'.$key]])) continue;
-							echo $entry[$form['customcrm_'.$key]] . ', ';	
+							
+							$field_id = $form['customcrm_'.$key];
+							$field = RGFormsModel::get_field($form, $field_id);
+							
+							$ques_answer[] = $field['label'] . ': ' . $entry[$form['customcrm_'.$key]];
 						}
+						
+						echo implode(', ', $ques_answer);
 					?>
 				</ContactComments>
 				
