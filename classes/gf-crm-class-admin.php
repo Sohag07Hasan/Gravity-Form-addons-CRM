@@ -25,7 +25,7 @@ class GravityFormCustomCRM{
 		'Fax' => array('Fax', 'Fax'),
 		'AgentCompany' => array('AgentCompany', 'AgentCompany'),
 		'AgentName' => array('AgentName', 'AgentName'),
-		'HasAgent' => array('HasAgent', 'HasAgent'),
+	//	'HasAgent' => array('HasAgent', 'HasAgent'),
 	//	'ReferrerURL' => array('ReferrerURL', 'ReferrerURL'),
 		'FirstName' => array('First Name', 'FirstName'),
 		'LastName' => array('Last Name', 'LastName'),
@@ -79,7 +79,7 @@ class GravityFormCustomCRM{
 		add_filter('gform_tooltips', array(get_class(), 'gform_tooltips'));
 		
 		//add settings page
-		add_action('admin_menu', array(get_class(), 'admin_menu_crm'));
+	//	add_action('admin_menu', array(get_class(), 'admin_menu_crm'));
 		
 		add_shortcode('crm_reseller_id', array(get_class(), 'set_reseller_id'));
 				
@@ -125,7 +125,17 @@ class GravityFormCustomCRM{
 	
 	//return the crm credentials
 	static function get_crm_credentials(){
-		return get_option('custom_crm_credentials');		
+		include dirname(__FILE__) . '/Credentials.inc';
+		
+		//return get_option('custom_crm_credentials');	
+
+		return array(
+			'crm_UserName' => $username,
+			'crm_Pass' => $password,
+			'crm_TypeId' => $type_id,
+			'crm_UserId' => $refferal_user_id,
+			'crm_genPass' => $new_user_password
+		);
 	}
 	
 	
@@ -264,35 +274,35 @@ class GravityFormCustomCRM{
 	static function get_settings_selector($form_id, $field_name, $value = null, $bool = 0){
 		switch ($field_name){
 			case "gravity_form_campaign" :
-				return self::get_settings_field_selector(self::campaign_selector(), $form_id, $field_name, null);
+				return self::get_settings_field_selector(self::campaign_selector(), $form_id, $field_name, $value);
 				break;
 				
 			case "gravity_form_contactgroup" :
-				return self::get_settings_field_selector(self::contactGroup_selector(), $form_id, $field_name, null);
+				return self::get_settings_field_selector(self::contactGroup_selector(), $form_id, $field_name, $value);
 				break;
 				
 			case "gravity_form_leadSource" :
-				return self::get_settings_field_selector(self::leadSource_selector(), $form_id, $field_name, null);
+				return self::get_settings_field_selector(self::leadSource_selector(), $form_id, $field_name, $value);
 				break;
 				
 			case "gravity_form_contactRating" :
-				return self::get_settings_field_selector(self::contactRating_selector(), $form_id, $field_name, null);
+				return self::get_settings_field_selector(self::contactRating_selector(), $form_id, $field_name, $value);
 				break;
 				
 			case "RequireEmailConfirmed" :
-				return self::get_settings_field_selector(self::boolean_selector(), $form_id, $field_name, null, 1);
+				return self::get_settings_field_selector(self::boolean_selector(), $form_id, $field_name, $value, 1);
 				break;
 			case "EmailContactOnRegister" :
-				return self::get_settings_field_selector(self::boolean_selector(), $form_id, $field_name, null, 1);
+				return self::get_settings_field_selector(self::boolean_selector(), $form_id, $field_name, $value, 1);
 				break;
 			case "SMSUserOnRequestedInfo" :
-				return self::get_settings_field_selector(self::boolean_selector(), $form_id, $field_name, null, 1);
+				return self::get_settings_field_selector(self::boolean_selector(), $form_id, $field_name, $value, 1);
 				break;
 			case "SMSUserOnRegister" :
-				return self::get_settings_field_selector(self::boolean_selector(), $form_id, $field_name, null, 1);
+				return self::get_settings_field_selector(self::boolean_selector(), $form_id, $field_name, $value, 1);
 				break;
 			case "EmailUserOnRegister" :
-				return self::get_settings_field_selector(self::boolean_selector(), $form_id, $field_name, null, 1);
+				return self::get_settings_field_selector(self::boolean_selector(), $form_id, $field_name, $value, 1);
 				break;
 		}
 	}
@@ -437,7 +447,7 @@ class GravityFormCustomCRM{
 		if($fields){
 			foreach($fields as $_field){
 				$str .= '<option value="'.$_field['id'].'"';
-				if($selected_field && $_field['id'] == $selected_field) $str .= ' selected';
+				if($_field['id'] == $selected_field) $str .= ' selected';
 				$str .= '>'.$_field['name'].'</option>'."\n";
 			}			
 		}

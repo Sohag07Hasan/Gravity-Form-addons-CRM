@@ -34,7 +34,7 @@
 						$form_data = $crm->refUserId;
 					}
 					elseif($key == 'RequireEmailConfirmed'){
-						$form_data = ($form[$key] == 1) ? 1 : 0;
+						$form_data = ($form[$key] == "1") ? 1 : 0;
 					}
 					else{
 						$form_data = $form[$key];
@@ -63,14 +63,14 @@
 			
 			<policy>
 			<?php 
-			foreach(GravityFormCustomCRM::$gftooltips_policy as $key => $value){
-				$v = ($value == 1) ? 1 : 0;
-				?>
-				<<?php echo $key; ?>>
-					<State><?php echo $v; ?></State>
-				</<?php echo $key?>>
-				<?php 
-			}
+				foreach(GravityFormCustomCRM::$gftooltips_policy as $key => $value){
+					$v = ($form[$key] == "1") ? 1 : 0;
+					?>
+					<<?php echo $key; ?>>
+						<State><?php echo $v; ?></State>
+					</<?php echo $key?>>
+					<?php 
+				}
 			?>
 			</policy>
 		</AddContactCampaign>	

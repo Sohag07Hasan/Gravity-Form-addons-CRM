@@ -184,6 +184,16 @@ class Form_submission_To_CRM{
 	}
 	
 	
+	//validate form
+	static function validate($data){
+		$is_valid = $data['is_valid'];		
+		$form = $data['form'];
+
+		if($form['customcrm_enabled']){
+			
+		}
+		
+	}
 	
 		
 }
