@@ -17,9 +17,6 @@
 					if(empty($entry[$form['customcrm_'.$key]])){
 						continue;
 					}
-					elseif($key == 'HasAgent'){
-						$form_data = ($entry[$form['customcrm_'.$key]] == 1) ? 1 : 0;
-					}
 					else{
 						$form_data = $entry[$form['customcrm_'.$key]];
 					}
@@ -44,6 +41,8 @@
 					<?php 
 				}				
 				?>
+				
+				<ReferrerURL><?php echo $entry['source_url']; ?></ReferrerURL>
 				
 				<ReferringUserId><?php echo $crm->refUserId; ?></ReferringUserId>
 				<Password><?php echo $crm->refPass; ?></Password>
