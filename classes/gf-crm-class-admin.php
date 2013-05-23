@@ -93,12 +93,30 @@ class GravityFormCustomCRM{
 		add_filter('gform_tooltips', array(get_class(), 'gform_tooltips'));
 		
 		//add settings page
-		add_action('admin_menu', array(get_class(), 'admin_menu_crm'));
+		//add_action('admin_menu', array(get_class(), 'admin_menu_crm'));
 				
 				
 	//	add_action('init', array(get_class(), 'soap_checking'));
+	
+		//submentu page
+		add_filter('gform_addon_navigation', array(get_class(), 'addon_crm_menu'), 50);
 		
 	}
+	
+	
+	
+	
+	static function addon_crm_menu($addon_menus){
+		$addon_menus[] = array(
+				 "name"       => "parkplace_crm",
+				 "label"      => __("ParkPlaceCRM", "gravityformscapsulecrm"),
+				 "callback"   => array(get_class(), "options_page_content"),
+				 "permission" => 'manage_options'
+			);
+			
+			return $addon_menus;
+	}
+	
 	
 	
 	static function soap_checking(){
