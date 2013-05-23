@@ -66,6 +66,7 @@ class GravityFormCustomCRM{
 		'gravity_form_user_id' => 'UserId',
 		'RequireEmailConfirmed' => 'EmailPrimaryConfirmed',
 		'gravity_form_contactRating' => 'Rating',
+		'gravity_form_leadSource' => 'LeadSourceID'
 		
 	);
 	
@@ -92,9 +93,8 @@ class GravityFormCustomCRM{
 		add_filter('gform_tooltips', array(get_class(), 'gform_tooltips'));
 		
 		//add settings page
-	//	add_action('admin_menu', array(get_class(), 'admin_menu_crm'));
-		
-		add_shortcode('crm_reseller_id', array(get_class(), 'set_reseller_id'));
+		add_action('admin_menu', array(get_class(), 'admin_menu_crm'));
+				
 				
 	//	add_action('init', array(get_class(), 'soap_checking'));
 		
@@ -120,18 +120,7 @@ class GravityFormCustomCRM{
 	 * Options page content
 	 */
 	static function options_page_content(){
-		if($_POST['Crm_saved'] == 'Y'){
-			$data = array();				
-			foreach($_POST as $key => $value){
-				if(strstr($key, 'crm_')){
-					$data[$key] = trim($value);
-				}
-			}
-
-			update_option('custom_crm_credentials', $data);
-		}
-
-		$credentials = self::get_crm_credentials();		
+			
 		include dirname(__FILE__) . '/includes/options-page.php';
 	}
 	
@@ -140,14 +129,15 @@ class GravityFormCustomCRM{
 	static function get_crm_credentials(){
 		include dirname(__FILE__) . '/Credentials.inc';
 		
-		//return get_option('custom_crm_credentials');	
+		//referral usr id and new user pass
+		$credentials = get_option('custom_crm_credentials');	
 
 		return array(
 			'crm_UserName' => $username,
 			'crm_Pass' => $password,
 			'crm_TypeId' => $type_id,
-			'crm_UserId' => $refferal_user_id,
-			'crm_genPass' => $new_user_password
+			'crm_UserId' => $credentials['crm_UserId'],
+			'crm_genPass' => $credentials['crm_genPass']
 		);
 	}
 	
@@ -284,18 +274,21 @@ class GravityFormCustomCRM{
 	
 	
 	//get setting selector here swithing is used
-	static function get_settings_selector($form_id, $field_name, $value = null, $bool = 0){
+	static function get_settings_selector($form_id, $field_name, $form = null, $bool = 0){
+		
+		$value = $form[$field_name];
+		
 		switch ($field_name){
 			case "gravity_form_campaign" :
-				return self::get_settings_field_selector(self::campaign_selector(), $form_id, $field_name, $value);
+				return self::get_settings_field_selector(self::campaign_selector($form), $form_id, $field_name, $value);
 				break;
 				
 			case "gravity_form_contactgroup" :
-				return self::get_settings_field_selector(self::contactGroup_selector(), $form_id, $field_name, $value);
+				return self::get_settings_field_selector(self::contactGroup_selector($form), $form_id, $field_name, $value);
 				break;
 				
 			case "gravity_form_leadSource" :
-				return self::get_settings_field_selector(self::leadSource_selector(), $form_id, $field_name, $value);
+				return self::get_settings_field_selector(self::leadSource_selector($form), $form_id, $field_name, $value);
 				break;
 				
 			case "gravity_form_contactRating" :
@@ -324,8 +317,8 @@ class GravityFormCustomCRM{
 	//eamil selector and it is boolean
 	static function boolean_selector(){
 		$c = array();
-		$d = array(1, 0);
-		$e = array('Yes', 'No');
+		$d = array(0, 1);
+		$e = array('No', 'Yes');
 		
 		foreach($e as $de => $value){
 			$c[] = array(
@@ -339,10 +332,10 @@ class GravityFormCustomCRM{
 	
 	
 	//campaigns are fetched and handled
-	static function campaign_selector(){
+	static function campaign_selector($form){
 		$crm = new Gravity_form_CRM();
 		
-		$response = $crm->get_campaigns(0);		
+		$response = $crm->get_campaigns($form);		
 		$campaigns_xml = $response['response'];
 		
 		
@@ -372,10 +365,10 @@ class GravityFormCustomCRM{
 	
 	
 	//contact group selector
-	static function contactGroup_selector(){
+	static function contactGroup_selector($form){
 		$crm = new Gravity_form_CRM();
 		
-		$response = $crm->get_contactGroups(0);		
+		$response = $crm->get_contactGroups($form);		
 		$contact_group_xml = $response['response'];
 		$c = array();
 			
@@ -404,9 +397,9 @@ class GravityFormCustomCRM{
 		
 	
 	//lead selector
-	static function leadSource_selector(){
+	static function leadSource_selector($form){
 		$crm = new Gravity_form_CRM();
-		$response = $crm->get_leadSources(0);
+		$response = $crm->get_leadSources($form);
 		$leadSource_xml = $response['response'];
 		$c = array();
 		
@@ -417,11 +410,14 @@ class GravityFormCustomCRM{
 			$body = $xml->xpath('//c:Body');
 			
 			$leadSoruces = $body[0]->GetUserCustomLeadSourcesResponse->GetUserCustomLeadSourcesResult->RtkCustomLeadSourceProfile;
-			
+						
 			if($leadSoruces){
 				foreach($leadSoruces as $leadSoruce){
+					
+					//var_dump($leadSoruce);
+					
 					$c[] = array(
-						'id' => (string) $leadSoruce->LeadSourceName,
+						'id' => (string) $leadSoruce->LeadSourceID,
 						'name' => (string) $leadSoruce->LeadSourceName
 					);
 				}
@@ -492,52 +488,5 @@ class GravityFormCustomCRM{
 		}
 		return $fields;
 	}
-	
-
-	/*
-	 * set the reseller id for every unique form
-	 */
-	static function set_reseller_id(){
-		return 'goodboy';
-	}
-	
-	
-	
-	//saving the form
-	static function gform_after_save_form(){
 		
-		var_dump($_REQUEST); die();
-		
-		$form_id = $_POST['gravity_form_id'];
-		//var_dump($form_id); die();		
-		
-		if($form_id) {
-			$data = array(
-				'user_id' => trim($_POST['gravity_form_user_id']),
-				'campaign' => $_POST['gravity_form_campaign'],
-				'group' => $_POST['gravity_form_group'],
-				'lead_source' => $_POST['gravity_form_lead_source'],
-				'rating' => $_POST['gravity_form_rating'],
-				'email_confirm' => $_POST['gravity_form_email_confirm'],
-				'email_contact' => $_POST['gravity_form_email_contact'],
-				'notify_text' => $_POST['gravity_form_notify_text'],
-				'notify_email' => $_POST['gravity_form_notify_email']
-			);
-			
-			$forms_data = get_option('gravity_form_to_crm_settings');
-			if($forms_data){
-				$forms_data[$form_id] = $data;
-			}
-			else{
-				$forms_data = array();
-				$forms_data[$form_id] = $data;
-			}
-			
-			var_dump($forms_data); die();
-			
-			return update_option('gravity_form_to_crm_settings', $forms_data);
-		}
-	}
-	
-	//get form settings
 }

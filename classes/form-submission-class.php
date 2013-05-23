@@ -25,13 +25,6 @@ class Form_submission_To_CRM{
 	//push to the crm
 	static function push_to_crm($entry, $form){
 		return self::push($entry, $form, true);
-		
-		/*
-		var_dump($form);		
-		var_dump($entry);
-		exit;
-		*/
-		
 	}
 	
 	

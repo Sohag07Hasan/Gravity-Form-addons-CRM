@@ -26,15 +26,17 @@
 				}
 				
 				foreach(GravityFormCustomCRM::$gftooltips_additional_profile as $key => $value){
-					if($key == 'gravity_form_user_id' && empty($form[$key])){
-						$form_data = $crm->refUserId;
+					if($key == 'gravity_form_user_id'){						
+						$form_data = empty($form[$key]) ? $crm->refUserId : $form[$key];
 					}
 					elseif($key == 'RequireEmailConfirmed'){
 						$form_data = ($form[$key] == "1") ? 1 : 0;
 					}
-					else{
+					else{						
 						$form_data = $form[$key];
+						if(empty($form_data)) continue;
 					}
+					
 					?>
 					<<?php echo $value; ?>><?php echo $form_data; ?></<?php echo $value; ?>>
 					<?php 

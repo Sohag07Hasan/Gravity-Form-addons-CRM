@@ -1,3 +1,20 @@
+<?php 
+	
+if($_POST['Crm_saved'] == 'Y'){
+	$data = array();				
+	foreach($_POST as $key => $value){
+		if(strstr($key, 'crm_')){
+			$data[$key] = trim($value);
+		}
+	}
+
+	update_option('custom_crm_credentials', $data);
+}
+
+$credentials = get_option('custom_crm_credentials');
+	
+?>
+
 <div class="wrap">
 	<h2>CRM Options</h2>
 	
@@ -10,23 +27,27 @@
 	<form action="" method="post">
 		<input type="hidden" name="Crm_saved" value="Y" />
 		<table class="form-table">
+		
+		
+		<!-- 
 			<tr>
 				<td>Username</td>
-				<td colspan="2"><input size="60" type="text" name="crm_UserName" value="<?php echo $credentials['crm_UserName']; ?>" /></td>
+				<td colspan="2"><input size="60" type="text" name="crm_UserName" value="<?php //echo $credentials['crm_UserName']; ?>" /></td>
 			</tr>
 			<tr>
 				<td>Password</td>
-				<td colspan="2"><input size="60" type="text" name="crm_Pass" value="<?php echo $credentials['crm_Pass']; ?>" /></td>
+				<td colspan="2"><input size="60" type="text" name="crm_Pass" value="<?php //echo $credentials['crm_Pass']; ?>" /></td>
 			</tr>
 			<tr>
 				<td>Type ID</td>
-				<td colspan="2"><input size="60" type="text" name="crm_TypeId" value="<?php echo $credentials['crm_TypeId']; ?>" /></td>
+				<td colspan="2"><input size="60" type="text" name="crm_TypeId" value="<?php //echo $credentials['crm_TypeId']; ?>" /></td>
 			</tr>
 			
 			<tr>
 				<td colspan="2"> <hr /> </td>
 			</tr>
-			
+		-->
+		
 			<tr>
 				<td>Referral User ID</td>
 				<td colspan="2"><input size="60" type="text" name="crm_UserId" value="<?php echo $credentials['crm_UserId']; ?>" /></td>

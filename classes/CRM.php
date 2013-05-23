@@ -54,13 +54,17 @@ class Gravity_form_CRM{
 	
 	
 	//returns the campaigns
-	public function get_campaigns($user_id){
-				
+	public function get_campaigns($form){
+		
+		$user_id = empty($form['gravity_form_user_id']) ? $this->refUserId : $form['gravity_form_user_id'];
+		
+		//var_dump($user_id);
+		
 		$xml = '<?xml version="1.0" encoding="utf-8"?>
 		<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
 		  <soap:Body>
 		    <GetUserCampaigns xmlns="https://secure.1parkplace.com/api/1.0/">
-		      <userID>'.$this->refUserId.'</userID>
+		      <userID>'.$user_id.'</userID>
 		    </GetUserCampaigns>
 		  </soap:Body>
 		</soap:Envelope>' ;
@@ -73,12 +77,17 @@ class Gravity_form_CRM{
 	
 	
 	//get contact groups
-	public function get_contactGroups($user_id){
+	public function get_contactGroups($form){
+		
+		$user_id = empty($form['gravity_form_user_id']) ? $this->refUserId : $form['gravity_form_user_id'];
+		
+		//var_dump($user_id);
+		
 		$xml = '<?xml version="1.0" encoding="utf-8"?>
 		<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
 		  <soap:Body>
 		    <GetUserContactGroups xmlns="https://secure.1parkplace.com/api/1.0/">
-		      <userID>'.$this->refUserId.'</userID>
+		      <userID>'.$user_id.'</userID>
 		    </GetUserContactGroups>
 		  </soap:Body>
 		</soap:Envelope>';
@@ -91,12 +100,17 @@ class Gravity_form_CRM{
 	
 	
 	//lead soruces
-	public function get_leadSources($user_id){
+	public function get_leadSources($form){
+		
+		$user_id = empty($form['gravity_form_user_id']) ? $this->refUserId : $form['gravity_form_user_id'];
+		
+		//var_dump($user_id);
+		
 		$xml = '<?xml version="1.0" encoding="utf-8"?>
 		<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
 		  <soap:Body>
 		    <GetUserCustomLeadSources xmlns="https://secure.1parkplace.com/api/1.0/">
-		      <userID>'.$this->refUserId.'</userID>
+		      <userID>'.$user_id.'</userID>
 		    </GetUserCustomLeadSources>
 		  </soap:Body>
 		</soap:Envelope>' ;

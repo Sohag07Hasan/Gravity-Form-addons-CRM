@@ -23,58 +23,58 @@ $form = RGFormsModel::get_form_meta($form_id);
 	<tr>
 		<td align="right"> Assign Contact to Campaign </td>
 		<td> 
-			<?php echo self::get_settings_selector($form_id, 'gravity_form_campaign', $form['gravity_form_campaign']); ?>
+			<?php echo self::get_settings_selector($form_id, 'gravity_form_campaign', $form); ?>
 		</td>
 	</tr>
 	<tr>
 		<td align="right"> Assign Contact to Group </td>		 
 		<td> 
-			<?php echo self::get_settings_selector($form_id, 'gravity_form_contactgroup', $form['gravity_form_contactgroup']); ?>
+			<?php echo self::get_settings_selector($form_id, 'gravity_form_contactgroup', $form); ?>
 		</td>
 	</tr>
 	<tr>
 		<td align="right"> Assign Lead Source As </td>
 		<td> 
-			<?php echo self::get_settings_selector($form_id, 'gravity_form_leadSource', $form['gravity_form_leadSource']); ?>
+			<?php echo self::get_settings_selector($form_id, 'gravity_form_leadSource', $form); ?>
 		</td>
 	</tr>
 	<tr>
 		<td align="right"> Assign Rating to Contact </td>
 		<td> 
-			<?php echo self::get_settings_selector($form_id, 'gravity_form_contactRating', $form['gravity_form_contactRating']); ?>
+			<?php echo self::get_settings_selector($form_id, 'gravity_form_contactRating', $form); ?>
 		</td>
 	</tr>	
 	<tr>
 		<td align="right"> Require Email Confirmation </td>
 		
 		<td> 
-			<?php echo self::get_settings_selector($form_id, 'RequireEmailConfirmed', $form['RequireEmailConfirmed']); ?>
+			<?php echo self::get_settings_selector($form_id, 'RequireEmailConfirmed', $form); ?>
 		</td>
 	</tr>
 	<tr>
 		<td align="right"> Email Contact on Register </td>
 		<td> 
-			<?php echo self::get_settings_selector($form_id, 'EmailContactOnRegister', $form['EmailContactOnRegister']); ?>
+			<?php echo self::get_settings_selector($form_id, 'EmailContactOnRegister', $form); ?>
 		</td>
 	</tr>
 	
 	<tr>
 		<td align="right"> SMS User On Requested Info </td>
 		<td> 
-			<?php echo self::get_settings_selector($form_id, 'SMSUserOnRequestedInfo', $form['SMSUserOnRequestedInfo']); ?>
+			<?php echo self::get_settings_selector($form_id, 'SMSUserOnRequestedInfo', $form); ?>
 		</td>
 	</tr>
 	
 	<tr>
 		<td align="right"> Notify me via Text </td>
 		<td> 
-			<?php echo self::get_settings_selector($form_id, 'SMSUserOnRegister', $form['SMSUserOnRegister']); ?>
+			<?php echo self::get_settings_selector($form_id, 'SMSUserOnRegister', $form); ?>
 		</td>
 	</tr>
 	<tr>
 		<td align="right"> Notify me via Email </td>
 		<td> 
-			<?php echo self::get_settings_selector($form_id, 'EmailUserOnRegister', $form['EmailUserOnRegister']); ?>
+			<?php echo self::get_settings_selector($form_id, 'EmailUserOnRegister', $form); ?>
 		</td>
 	</tr>
 	
