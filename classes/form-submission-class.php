@@ -18,7 +18,7 @@ class Form_submission_To_CRM{
 	public static function init(){
 		//if the form is submitted
 		add_action("gform_after_submission", array(get_class(), 'push_to_crm'), 10, 2);
-	//	add_filter('gform_validation', array(get_class(), 'validate'), 100);		
+		//add_filter('gform_validation', array(get_class(), 'validate'), 100);		
 	}
 	
 	
@@ -33,7 +33,9 @@ class Form_submission_To_CRM{
 	 */
 	static function push($entry, $form, $is_new){
 		
-		return self::push_to_test($entry, $form, $is_new);
+		if(CRM_DEBUG == true){
+			return self::push_to_test($entry, $form, $is_new);
+		}
 		
 		if(!$form['customcrm_enabled']) return;	
 		
@@ -217,12 +219,19 @@ class Form_submission_To_CRM{
 	
 	//validate form
 	static function validate($data){
-		$is_valid = $data['is_valid'];		
 		$form = $data['form'];
-
+		
+		var_dump($_POST);
 		var_dump($form);
 		exit;
 		
+		$validation_fields = array('FirstName', 'LastName', 'EmailPrimary');
+		
+		/*
+		foreach($form["fields"] as &$field){
+			
+		}
+		*/
 	}
 	
 		

@@ -14,24 +14,28 @@ class GravityFormCustomCRM{
 	//tolltips
 	//tolltips
 	public static $gftooltips_profile = array(
+		'FirstName' => array('First Name* (required)', 'FirstName'),
+		'LastName' => array('Last Name* (required)', 'LastName'),
+		'EmailPrimary' => array('Email Primary* (required)', 'EmailPrimary'),
+		'PhoneCell' => array('PhoneCell', 'PhoneCell'),
+		'PhoneWork' => array('PhoneWork', 'PhoneWork'),
+		'PhoneHome' => array('PhoneHome', 'PhoneHome'),
 		'Address1' => array('Address 1', 'Address 1'),
-		'Address2' => array('Address 2', 'Address 2'),
 		'City' => array('City', 'City'),
 		'State' => array('State', 'State'),
-		'ZIPCode' => array('ZIPCode', 'ZIPCode'),		
-		'PhoneCell' => array('PhoneCell', 'PhoneCell'),
-		'PhoneHome' => array('PhoneHome', 'PhoneHome'),
-		'PhoneWork' => array('PhoneWork', 'PhoneWork'),
-		'Fax' => array('Fax', 'Fax'),
+		'ZIPCode' => array('ZIPCode', 'ZIPCode'),
+		'Address2' => array('Address 2', 'Address 2'),
 		'AgentCompany' => array('AgentCompany', 'AgentCompany'),
 		'AgentName' => array('AgentName', 'AgentName'),
+		'EmailSecondary' => array('Email Secondary', 'EmailSecondary'),		
+		'Fax' => array('Fax', 'Fax'),
+		
 	//	'HasAgent' => array('HasAgent', 'HasAgent'),
 	//	'ReferrerURL' => array('ReferrerURL', 'ReferrerURL'),
-		'FirstName' => array('First Name', 'FirstName'),
-		'LastName' => array('Last Name', 'LastName'),
-		'EmailPrimary' => array('Email Primary', 'EmailPrimary'),
-		'EmailSecondary' => array('Email Secondary', 'EmailSecondary'),
-		'MeetingDate' => array('Meeting Date', 'Meeting Date'),				
+		
+		
+		
+		//'MeetingDate' => array('Meeting Date', 'Meeting Date'),				
 		//'StatusID' => array('Status Id', 'Status Id')
 	);
 	

@@ -15,6 +15,8 @@ define('CRMGRAVITYDIR', dirname(__FILE__));
 define('CRMGRAVITYFILE', __FILE__);
 define('CROMGRAVITYURL', plugins_url('', __FILE__));
 
+define('CRM_DEBUG', false);
+
 
 include CRMGRAVITYDIR . '/classes/CRM.php';
 
