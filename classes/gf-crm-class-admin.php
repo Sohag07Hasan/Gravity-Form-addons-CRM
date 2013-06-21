@@ -101,9 +101,15 @@ class GravityFormCustomCRM{
 		//submentu page
 		add_filter('gform_addon_navigation', array(get_class(), 'addon_crm_menu'), 50);
 		
+		add_filter('gform_pre_form_settings_save', array(get_class(), 'gform_pre_form_settings_save'));
+		
 	}
 	
-	
+	//save the meta data with the form
+	static function gform_pre_form_settings_save($updated_form){
+		$updated_form['gravity_form_user_id'] = rgpost('gravity_form_user_id');
+		return $updated_form;
+	}
 	
 	
 	static function addon_crm_menu($addon_menus){
@@ -285,7 +291,7 @@ class GravityFormCustomCRM{
 	
 	//get form text field
 	static function get_text_field($form_id, $field_name, $value = null) {
-		$str = '<input style="width:100%" type="text" id="'.$field_name.'" value="" onblur=\'ChangeCustomCRMfield("'.$field_name.'");\'>';
+		$str = '<input name="'.$field_name.'" style="width:100%" type="text" id="'.$field_name.'" value="" onblur=\'ChangeCustomCRMfield("'.$field_name.'");\'>';
 		$str .= '<script> jQuery("#'.$field_name.'").val(form.'.$field_name.'); </script>'."\n";
 		return $str;
 	}

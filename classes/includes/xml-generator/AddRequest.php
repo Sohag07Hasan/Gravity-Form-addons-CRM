@@ -20,6 +20,12 @@
 						$form_data = $entry[$form['customcrm_'.$key]];
 					}
 					
+					/*
+					if($key == 'MeetingDate'){
+						$form_data .= 'T12:00:00';
+					}
+					*/
+					
 					?>
 					<<?php echo $key; ?>><?php echo $form_data;?></<?php echo $key?>>
 					<?php 	

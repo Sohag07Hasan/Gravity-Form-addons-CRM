@@ -146,13 +146,25 @@ class Form_submission_To_CRM{
 		include CRMGRAVITYDIR . '/classes/includes/xml-generator/AddRequest.php';
 		$AddRequest = ob_get_contents();
 		ob_end_clean();
-		$response = $crm->addRequest($AddRequest);
 		
+		//var_dump($AddRequest); exit;
+		
+		$response = $crm->addRequest($AddRequest);
+				
 		header('Content-type: text/xml');
 		header('Content-Disposition: attachment; filename="addRequest.xml"');
 		
 		echo $response['request'];
+		
+		echo "\n \n";
+		
 		echo $response['response'];
+		
+		echo "\n \n";
+		
+		echo 'Status Code:' . $response['status_code'];
+		
+		echo "\n \n \n \n";
 		
 		//add to campaign
 		if(!empty($form['gravity_form_campaign'])){		
@@ -163,7 +175,17 @@ class Form_submission_To_CRM{
 			$response = $crm->addContactCampaign($AddCotactCampaign);
 			
 			echo $response['request'];
+			
+			echo "\n \n";
+		
 			echo $response['response'];
+			
+			echo "\n \n";
+			
+			echo 'Status Code:' . $response['status_code'];
+			
+			echo "\n \n \n \n";
+			
 		}
 		//add group
 		
@@ -175,7 +197,16 @@ class Form_submission_To_CRM{
 			$response = $crm->addContactGroup($AddCotactGroup);
 			
 			echo $response['request'];
+			
+			echo "\n \n";
+		
 			echo $response['response'];
+			
+			echo "\n \n";
+			
+			echo 'Status Code:' . $response['status_code'];
+			
+			echo "\n \n \n \n";
 		}
 
 				

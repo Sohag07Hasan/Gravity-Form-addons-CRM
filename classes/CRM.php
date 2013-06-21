@@ -56,7 +56,13 @@ class Gravity_form_CRM{
 	//returns the campaigns
 	public function get_campaigns($form){
 		
-		$user_id = empty($form['gravity_form_user_id']) ? $this->refUserId : $form['gravity_form_user_id'];
+		
+		if(isset($_POST['gravity_form_user_id']) && !empty($_POST['gravity_form_user_id'])){
+			$user_id = $_POST['gravity_form_user_id'];
+		}
+		else{
+			$user_id = empty($form['gravity_form_user_id']) ? $this->refUserId : $form['gravity_form_user_id'];
+		}
 		
 		//var_dump($user_id);
 		
@@ -79,7 +85,14 @@ class Gravity_form_CRM{
 	//get contact groups
 	public function get_contactGroups($form){
 		
-		$user_id = empty($form['gravity_form_user_id']) ? $this->refUserId : $form['gravity_form_user_id'];
+		
+		if(isset($_POST['gravity_form_user_id']) && !empty($_POST['gravity_form_user_id'])){
+			$user_id = $_POST['gravity_form_user_id'];
+		}
+		else{
+			$user_id = empty($form['gravity_form_user_id']) ? $this->refUserId : $form['gravity_form_user_id'];
+		}
+		
 		
 		//var_dump($user_id);
 		
@@ -102,7 +115,12 @@ class Gravity_form_CRM{
 	//lead soruces
 	public function get_leadSources($form){
 		
-		$user_id = empty($form['gravity_form_user_id']) ? $this->refUserId : $form['gravity_form_user_id'];
+		if(isset($_POST['gravity_form_user_id']) && !empty($_POST['gravity_form_user_id'])){
+			$user_id = $_POST['gravity_form_user_id'];
+		}
+		else{
+			$user_id = empty($form['gravity_form_user_id']) ? $this->refUserId : $form['gravity_form_user_id'];
+		}
 		
 		//var_dump($user_id);
 		

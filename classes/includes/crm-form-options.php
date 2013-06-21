@@ -5,7 +5,7 @@
 
 $form = RGFormsModel::get_form_meta($form_id);
 
-//var_dump($form);
+//var_dump($_POST['gravity_form_user_id']);
 
 ?>
 
@@ -18,7 +18,11 @@ $form = RGFormsModel::get_form_meta($form_id);
 
 	<tr>
 		<td align="right"> Assign to This User ID  </td>
-		<td> <?php echo self::get_text_field($form_id, 'gravity_form_user_id'); ?> <?php gform_tooltip('UserId'); ?> </td>
+		<td> 
+			<?php echo self::get_text_field($form_id, 'gravity_form_user_id'); ?> <br/> 
+			( <span style="color: red"> If this field has been changed, please save the <br/> 
+			 form first and then assign Lead/campaign etc </span> )
+		</td>
 	</tr>	
 	<tr>
 		<td align="right"> Assign Contact to Campaign </td>
